@@ -1,0 +1,42 @@
+{
+  "name": "rewind",
+  "version": "0.1.0",
+  "private": true,
+  "description": "An intelligent frontend monitoring platform that helps developers quickly locate and reproduce production issues",
+  "keywords": [
+    "frontend-monitoring",
+    "error-tracking",
+    "observability",
+    "typescript",
+    "monorepo"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/X29w/rewind.git"
+  },
+  "license": "MIT",
+  "author": "Rewind Team",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:server": "turbo dev --filter=@rewind-dev/server",
+    "dev:dashboard": "turbo dev --filter=@rewind-dev/dashboard",
+    "build": "turbo build",
+    "build:sdk": "turbo build --filter=@rewind-dev/sdk",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "type-check": "turbo type-check",
+    "clean": "turbo clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "turbo": "^2.3.0",
+    "typescript": "^5.5.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=9.15.0"
+  },
+  "packageManager": "pnpm@9.15.0"
+}

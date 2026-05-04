@@ -139,8 +139,52 @@ declare namespace SDK {
 
 ---
 
-### 1.6 函数声明
-尽量都实用箭头函数
+### 1.6 代码清理
+
+#### 未使用代码检测
+- **必须**定期检查并删除未使用的变量、函数、文件、文件夹
+- 使用 ESLint 的 `no-unused-vars` 规则检测未使用的变量
+- 使用工具（如 `unimported`、`depcheck`）检测未使用的依赖和文件
+- 每次 PR 前必须清理未使用的代码
+
+#### 清理原则
+- 未使用的变量：立即删除
+- 未使用的函数/类：确认无外部引用后删除
+- 未使用的文件：确认无 import 引用后删除
+- 未使用的文件夹：确认内部所有文件都未使用后删除
+- 未使用的依赖：从 package.json 中移除
+
+#### 例外情况
+- 公开 API（即使内部未使用，也可能被外部使用）
+- 类型定义（可能被外部 TypeScript 项目引用）
+- 配置文件（即使当前未使用，也可能在特定环境下使用）
+
+**示例**：
+
+```typescript
+// ❌ 错误：未使用的变量
+function processData(data: any[]) {
+  const unusedVar = 'not used'; // 应删除
+  const result = data.map(item => item.value);
+  return result;
+}
+
+// ✅ 正确：清理后
+function processData(data: any[]) {
+  return data.map(item => item.value);
+}
+
+// ❌ 错误：未使用的导入
+import { usedFunction, unusedFunction } from './utils'; // unusedFunction 应删除
+
+// ✅ 正确：只导入使用的
+import { usedFunction } from './utils';
+```
+
+---
+
+### 1.7 函数声明
+尽量都使用箭头函数
 
 ## 二、SDK 开发规范
 
