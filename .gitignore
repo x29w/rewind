@@ -157,6 +157,15 @@ yarn.lock
 # ============================================
 *.tsbuildinfo
 
+# Compiled JS files in TypeScript source directories
+# (These should not be committed - only dist/ should contain compiled output)
+packages/*/src/**/*.js
+packages/*/src/**/*.jsx
+
+# TanStack Router auto-generated files
+packages/dashboard/src/routeTree.gen.ts
+packages/dashboard/src/routeTree.gen.js
+
 # ============================================
 # Sourcemaps (production)
 # ============================================
@@ -203,6 +212,7 @@ CONVERSATION_MEMORY.md
 # Local development notes
 NOTES.md
 TODO.local.md
+CURRENT_TASKS.md
 
 # Test data
 test-data/

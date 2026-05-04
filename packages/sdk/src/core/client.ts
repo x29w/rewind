@@ -6,7 +6,7 @@
  */
 
 import type { Config, Client } from './types/index.d';
-import type { Rewind } from '@rewind-dev/shared';
+import type { Breadcrumb, SDKEvent } from '@rewind-dev/shared';
 
 /**
  * 全局客户端实例
@@ -36,10 +36,10 @@ export const init = (config: Config): Client => {
     captureError: (error: Error, extra?: Record<string, any>) => {
       console.log('[Rewind SDK] captureError:', error, extra);
     },
-    addBreadcrumb: (breadcrumb: Rewind.Breadcrumb) => {
+    addBreadcrumb: (breadcrumb: Breadcrumb) => {
       console.log('[Rewind SDK] addBreadcrumb:', breadcrumb);
     },
-    sendEvent: (event: Rewind.SDKEvent) => {
+    sendEvent: (event: SDKEvent) => {
       console.log('[Rewind SDK] sendEvent:', event);
     }
   };
@@ -74,7 +74,7 @@ export const captureError = (error: Error, extra?: Record<string, any>): void =>
  * ブレッドクラムを追加
  * 添加麵包屑
  */
-export const addBreadcrumb = (breadcrumb: Rewind.Breadcrumb): void => {
+export const addBreadcrumb = (breadcrumb: Breadcrumb): void => {
   if (!clientInstance) {
     console.warn('[Rewind SDK] Not initialized. Call init() first.');
     return;

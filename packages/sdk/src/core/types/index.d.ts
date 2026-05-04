@@ -5,7 +5,7 @@
  * SDK 核心類型定義
  */
 
-import type { Rewind } from '@rewind-dev/shared';
+import type { Breadcrumb, SDKEvent } from '@rewind-dev/shared';
 
 declare namespace SDK {
   /**
@@ -121,7 +121,7 @@ declare namespace SDK {
      * ブレッドクラムを追加
      * 添加麵包屑
      */
-    addBreadcrumb: (breadcrumb: Rewind.Breadcrumb) => void;
+    addBreadcrumb: (breadcrumb: Breadcrumb) => void;
     
     /**
      * 发送事件
@@ -129,7 +129,7 @@ declare namespace SDK {
      * イベントを送信
      * 發送事件
      */
-    sendEvent: (event: Rewind.SDKEvent) => void;
+    sendEvent: (event: SDKEvent) => void;
   }
 }
 

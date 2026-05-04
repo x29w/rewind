@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **build**: Add Turborepo configuration for build pipeline orchestration
 - **build**: Add pnpm configuration file (.npmrc) with peer dependency settings
 - **build**: Add shared package with TypeScript types for breadcrumb, device, event, and issue
+- **build**: Add compiled JavaScript files for dashboard (main.js, routeTree.gen.js, store/index.js)
+- **build**: Add pnpm-lock.yaml for dependency locking
 
 ### Changed - 2026-05-04
 
@@ -22,6 +24,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **docs**: Renumber function declaration section from 1.6 to 1.7 in Chinese development rules
 - **docs**: Fix typo in Chinese development rules (实用 → 使用)
 - **chore**: Simplify changelog update hook prompt to remove bilingual structure requirement
+- **refactor**: Replace namespace imports with named type imports in SDK client and types
+- **refactor**: Export individual types instead of namespace from shared package
+- **build**: Remove TypeScript compilation from dashboard build script (use Vite only)
+- **build**: Update Turborepo config from deprecated "pipeline" to "tasks" field
+- **feat**: Add QueryClient context to TanStack Router root route in dashboard
+- **build**: Disable strict mode in dashboard TypeScript config (keep strictNullChecks enabled)
+- **build**: Remove allowImportingTsExtensions from dashboard TypeScript config
 
 ---
 

@@ -7,5 +7,8 @@
  * SDK、Server、Dashboard 使用的共享類型定義
  */
 
-// Export the namespace types
-export type * from './types/index.d';
+// Re-export all types from individual files
+export * from './types/event';
+export * from './types/breadcrumb';
+export * from './types/device';
+export * from './types/issue';
