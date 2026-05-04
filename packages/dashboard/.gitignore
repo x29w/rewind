@@ -1,0 +1,25 @@
+# Build outputs
+dist/
+dist-ssr/
+*.local
+
+# Dependencies
+node_modules/
+
+# Logs
+logs/
+*.log
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# TanStack Router
+src/routeTree.gen.ts

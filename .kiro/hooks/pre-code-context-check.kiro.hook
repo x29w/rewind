@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Pre-Code Context Check",
+  "description": "Load conversation memory before any write operations to ensure full project context is available when coding",
+  "version": "1",
+  "when": {
+    "type": "preToolUse",
+    "toolTypes": [
+      "write"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Before performing this write operation, verify you have loaded the conversation memory context. If CONVERSATION_MEMORY.md exists and you haven't referenced it in this conversation yet, read it now to understand: current project status, completed tasks, development standards, tech stack decisions, and any important constraints. Then proceed with the write operation using this context."
+  }
+}

@@ -52,14 +52,46 @@ This hook automatically triggers before each conversation. The Agent will:
 - ⚡ Reduce time spent re-explaining project background
 
 **Works With**:
-Use together with "Generate Conversation Memory" hook:
+Use together with "Generate Conversation Memory" and "Pre-Code Context Check" hooks:
 1. When conversation context is about to reach limit, manually trigger memory generation
 2. When starting new conversation, this hook automatically loads memory
-3. Seamlessly continue development work
+3. Before any coding operation, "Pre-Code Context Check" ensures context is loaded
+4. Seamlessly continue development work
 
 ---
 
-### 4. Post-Write Quality Check
+### 4. Pre-Code Context Check
+**Trigger**: Before write operations (preToolUse on write tools)  
+**Function**: Verify conversation memory is loaded before any coding/file modification operations
+
+**Usage**:
+This hook automatically triggers before any write operation. The Agent will:
+1. Check if conversation memory context has been loaded in current conversation
+2. If not loaded yet, read `CONVERSATION_MEMORY.md` to understand project state
+3. Proceed with write operation using full context
+
+**Check Items**:
+- ✅ Current project status and phase
+- ✅ Completed tasks and pending TODOs
+- ✅ Development standards and conventions
+- ✅ Tech stack decisions and constraints
+- ✅ Important architectural decisions
+
+**Advantages**:
+- 🎯 Ensures all coding operations have full project context
+- 🚫 Prevents context-unaware code changes
+- 📚 Maintains consistency with project standards
+- 🔄 Works seamlessly with "Load Conversation Memory" hook
+
+**Works With**:
+Complements "Load Conversation Memory" hook:
+- "Load Conversation Memory" loads context at conversation start
+- "Pre-Code Context Check" ensures context is available before coding
+- Together they provide comprehensive context management
+
+---
+
+### 5. Post-Write Quality Check
 **Trigger**: After using write tools (after generating/modifying files)  
 **Function**: Comprehensive code quality check covering 4 aspects
 

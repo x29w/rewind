@@ -1,0 +1,77 @@
+// Prisma Schema for Rewind Server
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Application model
+model App {
+  id        String   @id @default(cuid())
+  name      String
+  apiKey    String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  issues Issue[]
+  events Event[]
+
+  @@map("apps")
+}
+
+// Issue model
+model Issue {
+  id          String   @id @default(cuid())
+  fingerprint String
+  type        String
+  level       String
+  status      String   @default("open")
+  title       String
+  message     String   @db.Text
+  stack       String?  @db.Text
+  eventCount  Int      @default(1)
+  userCount   Int      @default(1)
+  firstSeen   DateTime @default(now())
+  lastSeen    DateTime @default(now())
+  appId       String
+  appVersion  String?
+  environment String?
+  tags        Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  app    App     @relation(fields: [appId], references: [id])
+  events Event[]
+
+  @@unique([appId, fingerprint])
+  @@index([appId, status])
+  @@index([fingerprint])
+  @@map("issues")
+}
+
+// Event model
+model Event {
+  id          String   @id @default(cuid())
+  issueId     String
+  eventData   Json
+  breadcrumbs Json
+  device      Json
+  network     Json?
+  userId      String?
+  sessionId   String
+  pageUrl     String
+  appId       String
+  createdAt   DateTime @default(now())
+
+  issue Issue @relation(fields: [issueId], references: [id])
+  app   App   @relation(fields: [appId], references: [id])
+
+  @@index([issueId])
+  @@index([appId, createdAt])
+  @@index([sessionId])
+  @@map("events")
+}

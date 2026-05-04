@@ -1,0 +1,50 @@
+{
+  "name": "@rewind-dev/sdk",
+  "version": "0.1.0",
+  "description": "Rewind frontend monitoring SDK",
+  "main": "./dist/rewind.umd.js",
+  "module": "./dist/rewind.esm.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/rewind.esm.js",
+      "require": "./dist/rewind.umd.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "lint": "biome check .",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "rewind",
+    "monitoring",
+    "error-tracking",
+    "frontend",
+    "sdk"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@rewind-dev/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.0",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.0",
+    "@types/node": "^22.0.0",
+    "@vitest/coverage-v8": "^2.0.0",
+    "rollup": "^4.24.0",
+    "tslib": "^2.8.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  }
+}
