@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "name": "Post-Write Quality Check",
+  "description": "Comprehensive quality check after code/file changes: validates code standards, syncs documentation, updates .gitignore, and checks README updates",
+  "version": "1",
+  "when": {
+    "type": "postToolUse",
+    "toolTypes": [
+      "write"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "After the write operation, perform a comprehensive quality check:\n\n1. **Code Standards Validation** (if code files were modified):\n   - Check if file naming uses kebab-case\n   - Verify multi-language comments (Chinese, English, Japanese) for public APIs\n   - Ensure type definitions use namespace\n   - Check for unnecessary useEffect/useCallback in Dashboard\n   - Verify no dynamic imports (except React lazy loading)\n   - Ensure no setTimeout for business logic\n   - If violations found, fix them immediately\n\n2. **Documentation Sync** (if implementation files were modified):\n   - Check if implementation matches design docs in docs/\n   - Update docs if: directory structure changed, API definitions changed, database schema changed, component structure changed, or tech stack changed\n   - Keep Simplified Chinese as primary, note update date and reason\n\n3. **Gitignore Update** (if new files/directories were created):\n   - Check if new file types need to be ignored (temp files, logs, build outputs)\n   - Check if new directories contain sensitive data, temp data, or build outputs\n   - Check for sensitive information (API keys, certificates, config files)\n   - Check for new IDE/editor config files\n   - Check for new package manager caches or build caches\n   - Check for database files or backups\n   - If updates needed, add to .gitignore with explanation\n\n4. **README Update Check** (if significant features/changes were made):\n   - Check if README.md needs updates for: new features, changed installation steps, new dependencies, changed API usage, or updated architecture\n   - If updates needed, update all language versions (README.md, README.zh-CN.md, README.zh-TW.md, README.ja.md)\n   - Keep content consistent across all language versions\n\nFor documentation-only changes, skip code validation. For minor changes, provide brief confirmation. Only take action when necessary."
+  },
+  "workspaceFolderName": "Rewind",
+  "shortName": "post-write-quality-check"
+}

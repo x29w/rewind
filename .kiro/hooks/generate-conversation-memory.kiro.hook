@@ -1,14 +1,14 @@
 {
   "enabled": true,
-  "name": "对话记忆存储",
-  "description": "生成对话记忆文档，记录当前项目状态、已完成任务、待办事项等，用于新对话恢复上下文",
+  "name": "Generate Conversation Memory",
+  "description": "Generate conversation memory document to record current project state, completed tasks, TODOs, etc., for context recovery in new conversations",
   "version": "1",
   "when": {
     "type": "userTriggered"
   },
   "then": {
     "type": "askAgent",
-    "prompt": "请生成一份完整的对话记忆文档（CONVERSATION_MEMORY.md），包含以下内容：\n\n1. **项目概述**：简要说明 Rewind 项目是什么，核心功能\n2. **当前状态**：\n   - 已完成的任务和文件\n   - 当前所处的开发阶段（P0-a/P0-b等）\n   - 最近的重要决策和变更\n3. **目录结构**：当前项目的完整目录树\n4. **技术栈**：使用的技术和工具\n5. **开发规范**：关键的代码规范要点\n6. **待办事项**：\n   - 下一步要做什么\n   - 未完成的 Specs\n   - 已知问题和 TODO\n7. **重要文件索引**：列出关键文件的路径和作用\n8. **上下文提示**：新对话开始时需要知道的关键信息\n\n格式要求：使用 Markdown，结构清晰，便于快速阅读和理解。生成后保存到项目根目录的 CONVERSATION_MEMORY.md 文件。"
+    "prompt": "Please generate a complete conversation memory document (CONVERSATION_MEMORY.md) with the following content:\n\n1. **Project Overview**: Brief description of what Rewind project is, core features\n2. **Current Status**:\n   - Completed tasks and files\n   - Current development phase (P0-a/P0-b, etc.)\n   - Recent important decisions and changes\n3. **Directory Structure**: Complete project directory tree\n4. **Tech Stack**: Technologies and tools used\n5. **Development Standards**: Key code standard points\n6. **TODO Items**:\n   - What to do next\n   - Incomplete Specs\n   - Known issues and TODOs\n7. **Important File Index**: List key files with paths and purposes\n8. **Context Hints**: Key information needed when starting new conversations\n\nFormat requirements: Use Markdown, clear structure, easy to read and understand quickly. Save to CONVERSATION_MEMORY.md in project root after generation."
   },
   "workspaceFolderName": "Rewind",
   "shortName": "generate-conversation-memory"

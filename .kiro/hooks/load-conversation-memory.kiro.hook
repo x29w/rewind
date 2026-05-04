@@ -1,6 +1,6 @@
 {
   "enabled": true,
-  "name": "读取会话记忆",
+  "name": "Load Conversation Memory",
   "description": "Automatically read conversation memory file before responding to maintain context continuity",
   "version": "1",
   "when": {

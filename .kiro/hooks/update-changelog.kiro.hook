@@ -1,14 +1,14 @@
 {
   "enabled": true,
-  "name": "更新Changelog",
-  "description": "手动触发，查看自上次 commit 以来的变更并更新 CHANGELOG.md",
+  "name": "Update Changelog",
+  "description": "Manually triggered to review changes since last commit and update CHANGELOG.md",
   "version": "1",
   "when": {
     "type": "userTriggered"
   },
   "then": {
     "type": "askAgent",
-    "prompt": "请查看自上次 git commit 以来的所有文件变更，总结本次更新的内容，并更新 CHANGELOG.md。格式要求：1) 按功能分类（新功能/修复/文档/重构等）；2) 简洁明了，一行一个要点；3) 使用中文描述；4) 更新日期为今天。"
+    "prompt": "Please review all file changes since the last git commit, summarize the updates, and update CHANGELOG.md. Requirements: 1) Categorize by type (Features/Fixes/Docs/Refactor/etc.); 2) Be concise, one bullet point per item; 3) Write in ENGLISH; 4) Use today's date. Follow the Conventional Commits format and keep the bilingual structure (English primary, with Chinese/Japanese/Traditional Chinese translations)."
   },
   "workspaceFolderName": "Rewind",
   "shortName": "update-changelog"
