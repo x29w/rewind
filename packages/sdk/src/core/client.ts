@@ -13,6 +13,9 @@
 import type { Breadcrumb, SDKEvent, DeviceInfo, NetworkInfo } from '@rewind-dev/shared';
 import { BreadcrumbManager } from './breadcrumb-manager';
 import { PluginManager, type Plugin } from './plugin-manager';
+import { TransportQueue } from './transport-queue';
+import { Sender } from './sender';
+import { OfflineStorage } from './offline-storage';
 
 /**
  * SDK 配置接口
@@ -121,6 +124,30 @@ export class Client {
   private pluginManager: PluginManager;
   
   /**
+   * 上报队列
+   * Transport queue
+   * 送信キュー
+   * 上報佇列
+   */
+  private transportQueue: TransportQueue;
+  
+  /**
+   * 数据发送器
+   * Data sender
+   * データ送信
+   * 資料發送器
+   */
+  private sender: Sender;
+  
+  /**
+   * 离线存储
+   * Offline storage
+   * オフラインストレージ
+   * 離線儲存
+   */
+  private offlineStorage: OfflineStorage;
+  
+  /**
    * 会话 ID
    * Session ID
    * セッション ID
@@ -170,6 +197,12 @@ export class Client {
     this.config = this.resolveConfig(config);
     this.breadcrumbManager = new BreadcrumbManager(this.config.maxBreadcrumbs);
     this.pluginManager = new PluginManager();
+    this.transportQueue = new TransportQueue({
+      maxSize: 100,
+      flushInterval: 5000,
+    });
+    this.sender = new Sender();
+    this.offlineStorage = new OfflineStorage();
     this.sessionId = this.generateSessionId();
     this.user = config.user;
   }
@@ -210,7 +243,7 @@ export class Client {
    * SDK をセットアップ
    * 設置 SDK
    */
-  private setup(): void {
+  private async setup(): Promise<void> {
     if (this.initialized) {
       return;
     }
@@ -220,6 +253,26 @@ export class Client {
         console.log('[Rewind SDK] SDK is disabled');
       }
       return;
+    }
+    
+    // 初始化离线存储
+    // Initialize offline storage
+    // オフラインストレージを初期化
+    // 初始化離線儲存
+    await this.offlineStorage.init();
+    
+    // 恢复离线事件
+    // Restore offline events
+    // オフラインイベントを復元
+    // 恢復離線事件
+    await this.restoreOfflineEvents();
+    
+    // 监听上报事件
+    // Listen to flush events
+    // 送信イベントをリッスン
+    // 監聽上報事件
+    if (typeof window !== 'undefined') {
+      window.addEventListener('rewind:flush', this.handleFlush.bind(this));
     }
     
     // 初始化插件
@@ -486,38 +539,108 @@ export class Client {
    * @param event - 事件对象 / Event object / イベントオブジェクト / 事件物件
    */
   private transport(event: any): void {
-    // 使用 sendBeacon 或 fetch 发送
-    // Use sendBeacon or fetch to send
-    // sendBeacon または fetch を使用して送信
-    // 使用 sendBeacon 或 fetch 發送
+    // 加入上报队列
+    // Add to transport queue
+    // 送信キューに追加
+    // 加入上報佇列
+    this.transportQueue.push(event);
+  }
+  
+  /**
+   * 处理上报事件
+   * Handle flush event
+   * 送信イベントを処理
+   * 處理上報事件
+   */
+  private async handleFlush(event: CustomEvent): Promise<void> {
+    const { events } = event.detail;
+    
+    if (!events || events.length === 0) {
+      return;
+    }
     
     const url = `${this.config.dsn}/api/v1/report`;
-    const payload = JSON.stringify(event);
+    const payload = {
+      sessionId: this.sessionId,
+      userId: this.user?.id,
+      pageUrl: window.location.href,
+      events,
+      device: this.deviceInfo,
+      network: this.networkInfo,
+      appVersion: this.config.appVersion,
+      environment: this.config.environment,
+    };
     
-    // 优先使用 sendBeacon（页面卸载时也能发送）
-    // Prefer sendBeacon (can send even when page unloads)
-    // sendBeacon を優先（ページアンロード時も送信可能）
-    // 優先使用 sendBeacon（頁面卸載時也能發送）
-    if (navigator.sendBeacon) {
-      const blob = new Blob([payload], { type: 'application/json' });
-      navigator.sendBeacon(url, blob);
-    } else {
-      // 降级到 fetch
-      // Fallback to fetch
-      // fetch にフォールバック
-      // 降級到 fetch
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: payload,
-        keepalive: true,
-      }).catch((error) => {
-        if (this.config.debug) {
-          console.error('[Rewind SDK] Failed to send event:', error);
-        }
+    try {
+      const success = await this.sender.send({
+        url,
+        apiKey: this.config.appId,
+        data: payload,
       });
+      
+      if (success) {
+        this.transportQueue.onFlushSuccess();
+        
+        if (this.config.debug) {
+          console.log('[Rewind SDK] Events sent successfully:', events.length);
+        }
+      } else {
+        throw new Error('Send failed');
+      }
+    } catch (error) {
+      if (this.config.debug) {
+        console.error('[Rewind SDK] Failed to send events:', error);
+      }
+      
+      // 保存到离线存储
+      // Save to offline storage
+      // オフラインストレージに保存
+      // 儲存到離線儲存
+      for (const evt of events) {
+        try {
+          await this.offlineStorage.save(evt);
+        } catch (err) {
+          console.error('[Rewind SDK] Failed to save offline event:', err);
+        }
+      }
+      
+      this.transportQueue.onFlushFailure();
+    }
+  }
+  
+  /**
+   * 恢复离线事件
+   * Restore offline events
+   * オフラインイベントを復元
+   * 恢復離線事件
+   */
+  private async restoreOfflineEvents(): Promise<void> {
+    try {
+      const offlineEvents = await this.offlineStorage.getAll();
+      
+      if (offlineEvents.length === 0) {
+        return;
+      }
+      
+      if (this.config.debug) {
+        console.log('[Rewind SDK] Restoring offline events:', offlineEvents.length);
+      }
+      
+      // 重新加入队列
+      // Re-add to queue
+      // キューに再追加
+      // 重新加入佇列
+      for (const { id, event } of offlineEvents) {
+        this.transportQueue.push(event);
+      }
+      
+      // 清空离线存储
+      // Clear offline storage
+      // オフラインストレージをクリア
+      // 清空離線儲存
+      await this.offlineStorage.clear();
+    } catch (error) {
+      console.error('[Rewind SDK] Failed to restore offline events:', error);
     }
   }
   
@@ -538,8 +661,24 @@ export class Client {
    * 銷毀 SDK
    */
   public destroy(): void {
+    // 立即上报剩余事件
+    // Flush remaining events immediately
+    // 残りのイベントを即座に送信
+    // 立即上報剩餘事件
+    this.transportQueue.flush();
+    
+    // 移除事件监听
+    // Remove event listeners
+    // イベントリスナーを削除
+    // 移除事件監聽
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('rewind:flush', this.handleFlush.bind(this));
+    }
+    
     this.pluginManager.teardownAll();
     this.breadcrumbManager.clear();
+    this.transportQueue.destroy();
+    this.offlineStorage.close();
     this.initialized = false;
     Client.instance = null;
     

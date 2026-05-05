@@ -1,32 +1,44 @@
 ﻿{
   "name": "@rewind-dev/sdk",
   "version": "0.1.0",
-  "type": "module",
-  "main": "dist/rewind.umd.js",
+  "description": "Rewind SDK for browser error tracking and monitoring",
+  "main": "dist/rewind.cjs.js",
   "module": "dist/rewind.esm.js",
-  "types": "dist/index.d.ts",
+  "browser": "dist/rewind.umd.js",
+  "types": "dist/types/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "rollup -c",
-    "test": "vitest",
-    "test:coverage": "vitest --coverage"
+    "build:watch": "rollup -c --watch",
+    "dev": "rollup -c --watch",
+    "clean": "rm -rf dist",
+    "type-check": "tsc --noEmit",
+    "lint": "biome check ."
   },
+  "keywords": [
+    "error-tracking",
+    "monitoring",
+    "sdk",
+    "browser",
+    "frontend"
+  ],
+  "author": "Rewind Team",
+  "license": "MIT",
   "dependencies": {
     "@rewind-dev/shared": "workspace:*"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.2",
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^12.1.1",
-    "@types/node": "^22.10.2",
-    "@vitest/ui": "^2.1.9",
-    "chai": "^5.3.3",
-    "jsdom": "^29.1.1",
-    "rollup": "^4.24.4",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "rollup": "^4.30.1",
     "tslib": "^2.8.1",
-    "typescript": "^5.5.4",
-    "vitest": "^2.1.9"
+    "typescript": "^5.5.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
   }
 }
