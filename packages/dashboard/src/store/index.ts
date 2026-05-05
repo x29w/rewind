@@ -1,33 +1,16 @@
-/**
- * Redux Store 配置
- * Redux Store Configuration
- * Redux Store 設定
- * Redux Store 配置
- */
+﻿import { configureStore } from '@reduxjs/toolkit';
+import authReducer from './slices/auth-slice.ts';
+import projectReducer from './slices/project-slice.ts';
+import issueReducer from './slices/issue-slice.ts';
 
-import { configureStore } from '@reduxjs/toolkit';
-
-/**
- * Redux Store
- */
 export const store = configureStore({
   reducer: {
-    // TODO: Add reducers
+    auth: authReducer,
+    project: projectReducer,
+    issue: issueReducer,
   },
+  devTools: process.env.NODE_ENV !== 'production',
 });
 
-/**
- * RootState 类型
- * RootState Type
- * RootState タイプ
- * RootState 類型
- */
 export type RootState = ReturnType<typeof store.getState>;
-
-/**
- * AppDispatch 类型
- * AppDispatch Type
- * AppDispatch タイプ
- * AppDispatch 類型
- */
 export type AppDispatch = typeof store.dispatch;

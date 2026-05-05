@@ -12,14 +12,15 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.0.0",
+    "@reduxjs/toolkit": "^2.11.2",
     "@rewind-dev/shared": "workspace:*",
     "@tanstack/react-query": "^5.0.0",
     "@tanstack/react-router": "^1.0.0",
     "antd": "^5.21.0",
+    "axios": "^1.16.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
-    "react-redux": "^9.0.0"
+    "react-redux": "^9.2.0"
   },
   "devDependencies": {
     "@tanstack/router-vite-plugin": "^1.0.0",
