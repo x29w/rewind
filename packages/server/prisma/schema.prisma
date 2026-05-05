@@ -1,7 +1,7 @@
-// Prisma Schema for Rewind Server
-// Rewind ��������ݿ�ģ��
-// Rewind ���`�Щ`�ǩ`���٩`����ǥ�
-// Rewind �ŷ����Y�ώ�ģ��
+﻿// Prisma Schema for Rewind Server
+// Rewind 服务端数据库模型
+// Rewind サーバーデータベースモデル
+// Rewind 伺服器資料庫模型
 
 generator client {
   provider = "prisma-client-js"
@@ -13,9 +13,9 @@ datasource db {
 }
 
 // Application model
-// Ӧ��ģ��
-// ���ץꥱ�`������ǥ�
-// ����ģ��
+// 应用模型
+// アプリケーションモデル
+// 應用模型
 model App {
   id        String   @id @default(cuid())
   name      String
@@ -30,9 +30,9 @@ model App {
 }
 
 // Issue model
-// ����ģ��
-// ���}��ǥ�
-// ���}ģ��
+// 问题模型
+// 問題モデル
+// 問題模型
 model Issue {
   id          String   @id @default(cuid())
   fingerprint String
@@ -59,7 +59,7 @@ model Issue {
   // Unique constraint
   @@unique([appId, fingerprint])
   // Performance indexes
-  // �����Ż�����
+  // 性能优化索引
   @@index([appId, status])
   @@index([appId, lastSeen(sort: Desc)])
   @@index([fingerprint])
@@ -70,9 +70,9 @@ model Issue {
 }
 
 // Event model
-// �¼�ģ��
-// ���٥�ȥ�ǥ�
-// �¼�ģ��
+// 事件模型
+// イベントモデル
+// 事件模型
 model Event {
   id          String   @id @default(cuid())
   issueId     String
@@ -90,7 +90,7 @@ model Event {
   app   App   @relation(fields: [appId], references: [id])
 
   // Performance indexes
-  // �����Ż�����
+  // 性能优化索引
   @@index([issueId])
   @@index([appId, createdAt(sort: Desc)])
   @@index([sessionId])
