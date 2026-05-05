@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added - 2026-05-05
+
+- **feat**: Add BreadcrumbManager class with circular buffer implementation for SDK
+- **test**: Add comprehensive unit tests for BreadcrumbManager (8 test cases)
+- **docs**: Add TASKLIST.md with complete development roadmap and progress tracking
+
+### Changed - 2026-05-05
+
+- **build**: Add jsdom as dev dependency to SDK package for DOM testing support
+
 ### Added - 2026-05-04
 
 - **build**: Initialize monorepo infrastructure with pnpm workspaces and Turborepo
