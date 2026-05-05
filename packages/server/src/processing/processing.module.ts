@@ -14,6 +14,7 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { IssueModule } from '../issue/issue.module';
 import { EventModule } from '../event/event.module';
 import { SourcemapModule } from '../sourcemap/sourcemap.module';
+import { PerformanceModule } from '../performance/performance.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { SourcemapModule } from '../sourcemap/sourcemap.module';
     IssueModule,
     EventModule,
     SourcemapModule,
+    PerformanceModule,
   ],
   providers: [ProcessingProcessor, NormalizerService, PipelineService],
   exports: [PipelineService],

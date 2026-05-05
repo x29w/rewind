@@ -24,6 +24,7 @@ import { ProcessingModule } from './processing/processing.module';
 import { IngestionModule } from './ingestion/ingestion.module';
 import { AiModule } from './ai/ai.module';
 import { AlertModule } from './alert/alert.module';
+import { PerformanceModule } from './performance/performance.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { AlertModule } from './alert/alert.module';
     IngestionModule,
     AiModule,
     AlertModule,
+    PerformanceModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService],

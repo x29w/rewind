@@ -13,6 +13,7 @@ import { FingerprintService } from '../issue/fingerprint.service';
 import { IssueService } from '../issue/issue.service';
 import { EventService } from '../event/event.service';
 import { StackResolverService } from '../sourcemap/stack-resolver.service';
+import { PerformanceService } from '../performance/performance.service';
 
 interface RawEvent {
   type: string;
@@ -41,6 +42,7 @@ export class ProcessingProcessor extends WorkerHost {
     private readonly issueService: IssueService,
     private readonly eventService: EventService,
     private readonly stackResolver: StackResolverService,
+    private readonly performanceService: PerformanceService,
   ) {
     super();
   }
@@ -139,7 +141,16 @@ export class ProcessingProcessor extends WorkerHost {
           },
         });
 
-        // ⑥ 性能聚合（TODO: 在 PerformanceModule 中实现）
+        // ⑥ 性能聚合
+        if (event.type === 'performance') {
+          await this.performanceService.savePerformanceData({
+            projectId,
+            sessionId: event.sessionId,
+            userId: event.userId,
+            data: event.eventData as any,
+          });
+        }
+
         // ⑦ 告警检测（TODO: 在 AlertModule 中实现）
       } catch (error) {
         console.error('Failed to process event:', error);

@@ -12,3 +12,4 @@ export * from './types/event';
 export * from './types/breadcrumb';
 export * from './types/device';
 export * from './types/issue';
+export * from './types/performance';
