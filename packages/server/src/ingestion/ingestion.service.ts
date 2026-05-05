@@ -1,172 +1,71 @@
 ﻿/**
- * 数据接收服务
+ * Ingestion 服务
  * Ingestion Service
- * データ取り込みサービス
- * 資料接收服務
+ * Ingestion サービス
+ * Ingestion 服務
  */
 
-import { Injectable, Logger } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { ReportEventDto } from './dto/report-event.dto';
-import * as crypto from 'crypto';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { RateLimiterService } from './rate-limiter.service';
+import { PipelineService } from '../processing/pipeline.service';
+import { ReportDto } from './dto';
 
 @Injectable()
 export class IngestionService {
-  private readonly logger = new Logger(IngestionService.name);
+  constructor(
+    private readonly rateLimiter: RateLimiterService,
+    private readonly pipeline: PipelineService,
+  ) {}
 
-  constructor(private readonly prisma: PrismaService) {}
-
-  async processEvent(event: ReportEventDto, apiKey: string): Promise<string> {
-    try {
-      const app = await this.prisma.app.findUnique({
-        where: { apiKey },
-      });
-
-      if (!app) {
-        throw new Error('Invalid API key');
-      }
-
-      const fingerprint = this.generateFingerprint(event);
-      const issue = await this.findOrCreateIssue(app.id, event, fingerprint);
-
-      const eventRecord = await this.prisma.event.create({
-        data: {
-          issueId: issue.id,
-          appId: app.id,
-          eventData: {
-            type: event.type,
-            level: event.level,
-            message: event.message,
-            stack: event.stack,
-            timestamp: event.timestamp,
-            extra: event.extra,
-          },
-          breadcrumbs: event.breadcrumbs as any,
-          device: event.device as any,
-          network: (event.network || {}) as any,
-          userId: event.userId,
-          sessionId: event.sessionId,
-          pageUrl: event.pageUrl,
-        },
-      });
-
-      await this.updateIssueStats(issue.id, event.userId);
-
-      this.logger.log(`Event processed: ${eventRecord.id} for issue: ${issue.id}`);
-
-      return eventRecord.id;
-    } catch (error) {
-      this.logger.error(`Failed to process event: ${error.message}`, error.stack);
-      throw error;
-    }
-  }
-
-  async processBatch(events: ReportEventDto[], apiKey: string): Promise<number> {
-    let successCount = 0;
-
-    for (const event of events) {
-      try {
-        await this.processEvent(event, apiKey);
-        successCount++;
-      } catch (error) {
-        this.logger.error(`Failed to process event in batch: ${error.message}`);
-      }
+  /**
+   * 处理上报数据
+   * Process Report
+   * レポートを処理
+   * 處理上報資料
+   *
+   * @description_zh 验证限流后将事件加入处理队列
+   * @description_en Validate rate limit and enqueue events for processing
+   * @description_ja レート制限を検証し、イベントを処理キューに追加
+   * @description_tw 驗證限流後將事件加入處理佇列
+   */
+  async process({
+    dto,
+    projectId,
+  }: {
+    dto: ReportDto;
+    projectId: string;
+  }): Promise<void> {
+    // 限流检查
+    const allowed = await this.rateLimiter.check({ projectId });
+    if (!allowed) {
+      throw new HttpException('Rate limit exceeded', HttpStatus.TOO_MANY_REQUESTS);
     }
 
-    return successCount;
-  }
+    // 基本验证
+    if (!dto.events || dto.events.length === 0) {
+      throw new HttpException('No events provided', HttpStatus.BAD_REQUEST);
+    }
 
-  private generateFingerprint(event: ReportEventDto): string {
-    const stackLines = event.stack
-      ? event.stack.split('\n').slice(0, 5).join('\n')
-      : '';
+    if (dto.events.length > 100) {
+      throw new HttpException(
+        'Too many events (max 100 per request)',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
-    const fingerprintData = `${event.type}:${event.message}:${stackLines}`;
-
-    return crypto
-      .createHash('sha256')
-      .update(fingerprintData)
-      .digest('hex')
-      .substring(0, 32);
-  }
-
-  private async findOrCreateIssue(
-    appId: string,
-    event: ReportEventDto,
-    fingerprint: string,
-  ) {
-    let issue = await this.prisma.issue.findUnique({
-      where: {
-        appId_fingerprint: {
-          appId,
-          fingerprint,
-        },
+    // 加入处理队列
+    await this.pipeline.enqueue({
+      events: dto.events,
+      meta: {
+        sessionId: dto.sessionId,
+        userId: dto.userId,
+        pageUrl: dto.pageUrl,
+        device: dto.device,
+        network: dto.network,
+        appVersion: dto.appVersion,
+        environment: dto.environment,
       },
+      projectId,
     });
-
-    if (!issue) {
-      issue = await this.prisma.issue.create({
-        data: {
-          appId,
-          fingerprint,
-          type: event.type,
-          level: event.level,
-          title: this.generateIssueTitle(event),
-          message: event.message,
-          stack: event.stack,
-          appVersion: event.appVersion,
-          environment: event.environment,
-          tags: (event.tags || {}) as any,
-          eventCount: 1,
-          userCount: 1,
-          firstSeen: new Date(event.timestamp),
-          lastSeen: new Date(event.timestamp),
-        },
-      });
-
-      this.logger.log(`New issue created: ${issue.id}`);
-    }
-
-    return issue;
-  }
-
-  private async updateIssueStats(issueId: string, userId?: string) {
-    const issue = await this.prisma.issue.findUnique({
-      where: { id: issueId },
-      include: {
-        events: {
-          select: { userId: true },
-          distinct: ['userId'],
-        },
-      },
-    });
-
-    if (!issue) return;
-
-    const uniqueUserIds = new Set(
-      issue.events.map((e) => e.userId).filter((id) => id !== null),
-    );
-
-    await this.prisma.issue.update({
-      where: { id: issueId },
-      data: {
-        eventCount: { increment: 1 },
-        userCount: uniqueUserIds.size,
-        lastSeen: new Date(),
-      },
-    });
-  }
-
-  private generateIssueTitle(event: ReportEventDto): string {
-    if (event.message) {
-      return event.message.substring(0, 200);
-    }
-
-    if (event.stack) {
-      const firstLine = event.stack.split('\n')[0];
-      return firstLine.substring(0, 200);
-    }
-
-    return `${event.type} - ${event.level}`;
   }
 }

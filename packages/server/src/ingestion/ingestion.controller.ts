@@ -1,8 +1,8 @@
 /**
- * 数据接收控制器
+ * Ingestion 控制器
  * Ingestion Controller
- * データ取り込みコントローラー
- * 資料接收控制器
+ * Ingestion コントローラー
+ * Ingestion 控制器
  */
 
 import {
@@ -10,63 +10,48 @@ import {
   Post,
   Body,
   HttpCode,
-  HttpStatus,
   UseGuards,
-  Headers,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { IngestionService } from './ingestion.service';
-import { ReportEventDto } from './dto/report-event.dto';
-import { ApiKeyGuard } from '../guards/api-key.guard';
-import { Throttle } from '@nestjs/throttler';
+import { ReportDto } from './dto';
+import { ApiKeyGuard } from '../common/guards/api-key.guard';
+import { CurrentProject } from '../common/decorators/current-project.decorator';
 
-/**
- * 数据接收控制器
- * Ingestion Controller
- * データ取り込みコントローラー
- * 資料接收控制器
- */
 @Controller('api/v1')
-@UseGuards(ApiKeyGuard)
 export class IngestionController {
   constructor(private readonly ingestionService: IngestionService) {}
 
   /**
-   * 接收事件上报
-   * Receive event report
-   * イベントレポートを受信
-   * 接收事件上報
-   * 
-   * @param event - 事件数据 / Event data / イベントデータ / 事件資料
-   * @param apiKey - API 密钥 / API key / API キー / API 金鑰
+   * 接收 SDK 上报数据
+   * Receive SDK Report
+   * SDK レポートを受信
+   * 接收 SDK 上報資料
+   *
+   * @description_zh 接收 SDK 上报的事件数据，验证后加入处理队列
+   * @description_en Receive event data from SDK, validate and enqueue for processing
+   * @description_ja SDK からのイベントデータを受信し、検証後に処理キューに追加
+   * @description_tw 接收 SDK 上報的事件資料，驗證後加入處理佇列
    */
   @Post('report')
-  @HttpCode(HttpStatus.ACCEPTED)
-  @Throttle({ default: { limit: 100, ttl: 60000 } }) // 100 requests per minute
+  @UseGuards(ApiKeyGuard)
+  @HttpCode(204)
   async report(
-    @Body() event: ReportEventDto,
-    @Headers('x-api-key') apiKey: string,
-  ): Promise<{ success: boolean; eventId?: string }> {
-    const eventId = await this.ingestionService.processEvent(event, apiKey);
-    return { success: true, eventId };
-  }
-
-  /**
-   * 批量接收事件
-   * Batch receive events
-   * イベントをバッチ受信
-   * 批次接收事件
-   * 
-   * @param events - 事件数组 / Event array / イベント配列 / 事件陣列
-   * @param apiKey - API 密钥 / API key / API キー / API 金鑰
-   */
-  @Post('report/batch')
-  @HttpCode(HttpStatus.ACCEPTED)
-  @Throttle({ default: { limit: 10, ttl: 60000 } }) // 10 batch requests per minute
-  async reportBatch(
-    @Body() events: ReportEventDto[],
-    @Headers('x-api-key') apiKey: string,
-  ): Promise<{ success: boolean; count: number }> {
-    const count = await this.ingestionService.processBatch(events, apiKey);
-    return { success: true, count };
+    @Body() dto: ReportDto,
+    @CurrentProject() project: { id: string; name: string; settings: any },
+  ) {
+    try {
+      await this.ingestionService.process({ dto, projectId: project.id });
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      console.error('Failed to process report:', error);
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

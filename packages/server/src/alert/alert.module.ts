@@ -1,29 +1,29 @@
 ﻿/**
- * 告警模块
+ * Alert 模块
  * Alert Module
- * アラートモジュール
- * 告警模組
+ * Alert モジュール
+ * Alert 模組
  */
 
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { AlertService } from './alert.service';
+import { ScheduleModule } from '@nestjs/schedule';
 import { AlertController } from './alert.controller';
-import { EmailNotifier } from './notifiers/email.notifier';
-import { WebhookNotifier } from './notifiers/webhook.notifier';
-import { WechatNotifier } from './notifiers/wechat.notifier';
-import { DingtalkNotifier } from './notifiers/dingtalk.notifier';
+import { AlertService } from './alert.service';
+import { DetectorService } from './detector.service';
+import { NotifierService } from './notifier/notifier.service';
+import { WebhookNotifier } from './notifier/webhook.notifier';
+import { EmailNotifier } from './notifier/email.notifier';
 import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
-  imports: [ConfigModule, PrismaModule],
+  imports: [ScheduleModule.forRoot(), PrismaModule],
   controllers: [AlertController],
   providers: [
     AlertService,
-    EmailNotifier,
+    DetectorService,
+    NotifierService,
     WebhookNotifier,
-    WechatNotifier,
-    DingtalkNotifier,
+    EmailNotifier,
   ],
   exports: [AlertService],
 })
