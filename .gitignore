@@ -46,6 +46,14 @@ coverage/
 *.lcov
 .vitest/
 
+# Playwright E2E Testing
+test-results/
+playwright-report/
+playwright/.cache/
+packages/dashboard/test-results/
+packages/dashboard/playwright-report/
+packages/dashboard/playwright/.cache/
+
 # ============================================
 # IDE & Editors
 # ============================================
@@ -174,6 +182,9 @@ docker-compose.override.yml
 *.bak
 *.backup
 *.old
+
+# Deployment verification reports
+deployment-report-*.txt
 
 # ============================================
 # Kiro AI Working Files

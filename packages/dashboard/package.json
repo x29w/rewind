@@ -9,7 +9,12 @@
     "preview": "vite preview",
     "lint": "biome check .",
     "type-check": "tsc --noEmit",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug",
+    "test:install": "playwright install"
   },
   "dependencies": {
     "@ant-design/icons": "^6.2.2",
@@ -25,6 +30,7 @@
     "react-redux": "^9.2.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.40.0",
     "@tanstack/router-vite-plugin": "^1.0.0",
     "@types/node": "^22.0.0",
     "@types/react": "^18.3.0",
