@@ -12,21 +12,65 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Application model
-// 应用模型
-// アプリケーションモデル
-// 應用模型
-model App {
+// User model
+// 用户模型
+// ユーザーモデル
+// 使用者模型
+model User {
   id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
   name      String
-  apiKey    String   @unique
+  role      String   @default("user") // user, admin
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  issues Issue[]
-  events Event[]
+  projects ProjectMember[]
 
-  @@map("apps")
+  @@map("users")
+}
+
+// Project model (renamed from App)
+// 项目模型
+// プロジェクトモデル
+// 專案模型
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  apiKey      String   @unique
+  settings    Json?    // 项目配置（采样率、数据保留天数等）
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  issues                Issue[]
+  events                Event[]
+  sourcemaps            Sourcemap[]
+  alertRules            AlertRule[]
+  alertHistory          AlertHistory[]
+  performanceAggs       PerformanceAggregation[]
+  aiAnalyses            AiAnalysis[]
+  members               ProjectMember[]
+
+  @@map("projects")
+}
+
+// Project Member model
+// 项目成员模型
+// プロジェクトメンバーモデル
+// 專案成員模型
+model ProjectMember {
+  id        String   @id @default(cuid())
+  projectId String
+  userId    String
+  role      String   @default("member") // owner, admin, member
+  createdAt DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId])
+  @@map("project_members")
 }
 
 // Issue model
@@ -38,7 +82,7 @@ model Issue {
   fingerprint String
   type        String
   level       String
-  status      String   @default("open")
+  status      String   @default("open") // open, resolved, ignored, regressed
   title       String
   message     String   @db.Text
   stack       String?  @db.Text
@@ -46,26 +90,25 @@ model Issue {
   userCount   Int      @default(1)
   firstSeen   DateTime @default(now())
   lastSeen    DateTime @default(now())
-  appId       String
+  projectId   String
   appVersion  String?
   environment String?
-  tags        Json?
+  aiSummary   String?  @db.Text // AI 一句话摘要
+  metadata    Json?    // 扩展字段（如环境分布快照）
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  app    App     @relation(fields: [appId], references: [id])
-  events Event[]
+  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  events      Event[]
+  aiAnalyses  AiAnalysis[]
 
-  // Unique constraint
-  @@unique([appId, fingerprint])
-  // Performance indexes
-  // 性能优化索引
-  @@index([appId, status])
-  @@index([appId, lastSeen(sort: Desc)])
+  @@unique([projectId, fingerprint])
+  @@index([projectId, status])
+  @@index([projectId, lastSeen(sort: Desc)])
   @@index([fingerprint])
   @@index([level])
   @@index([type])
-  @@index([appId, status, lastSeen(sort: Desc)])
+  @@index([projectId, status, lastSeen(sort: Desc)])
   @@map("issues")
 }
 
@@ -74,27 +117,160 @@ model Issue {
 // イベントモデル
 // 事件模型
 model Event {
-  id          String   @id @default(cuid())
-  issueId     String
-  eventData   Json
-  breadcrumbs Json
-  device      Json
-  network     Json?
-  userId      String?
-  sessionId   String
-  pageUrl     String
-  appId       String
-  createdAt   DateTime @default(now())
+  id             String   @id @default(cuid())
+  issueId        String?
+  type           String   // error, blank_screen, api_error, performance
+  subType        String?
+  eventData      Json
+  breadcrumbs    Json     // 行为轨迹
+  requestContext Json?    // 关联接口请求
+  device         Json
+  network        Json?
+  userId         String?
+  sessionId      String
+  pageUrl        String
+  projectId      String
+  appVersion     String?
+  environment    String?
+  timestamp      DateTime
+  createdAt      DateTime @default(now())
 
-  issue Issue @relation(fields: [issueId], references: [id])
-  app   App   @relation(fields: [appId], references: [id])
+  issue   Issue?  @relation(fields: [issueId], references: [id], onDelete: SetNull)
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  // Performance indexes
-  // 性能优化索引
   @@index([issueId])
-  @@index([appId, createdAt(sort: Desc)])
+  @@index([projectId, createdAt(sort: Desc)])
   @@index([sessionId])
   @@index([userId])
   @@index([issueId, createdAt(sort: Desc)])
+  @@index([projectId, type])
+  @@index([timestamp])
   @@map("events")
+}
+
+// Sourcemap model
+// SourceMap 模型
+// SourceMap モデル
+// SourceMap 模型
+model Sourcemap {
+  id         String   @id @default(cuid())
+  projectId  String
+  appVersion String
+  fileName   String
+  fileUrl    String?
+  content    String   @db.Text // SourceMap JSON 内容
+  createdAt  DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, appVersion, fileName])
+  @@index([projectId, appVersion])
+  @@map("sourcemaps")
+}
+
+// Alert Rule model
+// 告警规则模型
+// アラートルールモデル
+// 告警規則模型
+model AlertRule {
+  id            String   @id @default(cuid())
+  projectId     String
+  name          String
+  description   String?
+  metric        String   // error_count, new_issue_count, issue_regressed, blank_screen_count, api_error_rate, lcp_p75
+  condition     Json     // { operator: 'gt', threshold: 100, window: '5m' }
+  filters       Json?    // { environment: 'production' }
+  actions       Json     // [{ type: 'webhook', url: '...' }, { type: 'email', to: [...] }]
+  silencePeriod Int      @default(1800) // 静默期（秒）
+  enabled       Boolean  @default(true)
+  lastTriggered DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  project Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  history AlertHistory[]
+
+  @@index([projectId, enabled])
+  @@map("alert_rules")
+}
+
+// Alert History model
+// 告警历史模型
+// アラート履歴モデル
+// 告警歷史模型
+model AlertHistory {
+  id          String   @id @default(cuid())
+  ruleId      String
+  projectId   String
+  metric      String
+  value       Float
+  threshold   Float
+  message     String   @db.Text
+  notified    Boolean  @default(false)
+  notifiedAt  DateTime?
+  triggeredAt DateTime @default(now())
+
+  rule    AlertRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  project Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, triggeredAt(sort: Desc)])
+  @@index([ruleId])
+  @@map("alert_history")
+}
+
+// Performance Aggregation model
+// 性能聚合模型
+// パフォーマンス集計モデル
+// 效能聚合模型
+model PerformanceAggregation {
+  id          String   @id @default(cuid())
+  projectId   String
+  pageUrl     String
+  period      String   // minute, hour, day
+  periodStart DateTime
+  fcpP50      Float?
+  fcpP75      Float?
+  fcpP95      Float?
+  lcpP50      Float?
+  lcpP75      Float?
+  lcpP95      Float?
+  fidP50      Float?
+  fidP75      Float?
+  fidP95      Float?
+  clsP50      Float?
+  clsP75      Float?
+  clsP95      Float?
+  ttfbP50     Float?
+  ttfbP75     Float?
+  ttfbP95     Float?
+  sampleCount Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, pageUrl, period, periodStart])
+  @@index([projectId, period, periodStart])
+  @@map("performance_aggregations")
+}
+
+// AI Analysis model
+// AI 分析模型
+// AI 分析モデル
+// AI 分析模型
+model AiAnalysis {
+  id        String   @id @default(cuid())
+  issueId   String
+  projectId String
+  type      String   // summary, analysis, fix_direction, daily_report
+  result    Json     // 分析结果
+  modelUsed String?  // 使用的模型标识
+  expiresAt DateTime? // 缓存过期时间
+  createdAt DateTime @default(now())
+
+  issue   Issue   @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([issueId, type])
+  @@index([projectId, createdAt(sort: Desc)])
+  @@map("ai_analyses")
 }

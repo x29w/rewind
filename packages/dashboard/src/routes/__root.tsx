@@ -6,10 +6,8 @@
  */
 
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
-import { Layout } from 'antd';
+import { AppLayout } from '../components/layout/AppLayout';
 import type { QueryClient } from '@tanstack/react-query';
-
-const { Header, Content } = Layout;
 
 /**
  * 根路由组件
@@ -19,14 +17,9 @@ const { Header, Content } = Layout;
  */
 const RootComponent = () => {
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Header style={{ color: 'white', fontSize: '20px' }}>
-        Rewind Dashboard
-      </Header>
-      <Content style={{ padding: '24px' }}>
-        <Outlet />
-      </Content>
-    </Layout>
+    <AppLayout>
+      <Outlet />
+    </AppLayout>
   );
 };
 

@@ -162,6 +162,8 @@ user-data/
 # SourceMaps Storage (Server)
 # ============================================
 packages/server/sourcemaps/
+packages/server/storage/
+storage/
 
 # ============================================
 # SSL Certificates
