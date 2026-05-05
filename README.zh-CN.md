@@ -228,13 +228,13 @@ init({
 
 ---
 
-## 📧 联系方式
+<!-- ## 📧 联系方式
 
 - 项目主页：[GitHub](https://github.com/your-org/rewind)
 - 问题反馈：[Issues](https://github.com/your-org/rewind/issues)
 - 邮件：dev@rewind.example.com
 
----
+--- -->
 
 <div align="center">
 

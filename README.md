@@ -228,13 +228,13 @@ Thanks to all developers who have contributed to the Rewind project!
 
 ---
 
-## 📧 Contact
+<!-- ## 📧 Contact
 
 - Project Homepage: [GitHub](https://github.com/your-org/rewind)
 - Issue Tracker: [Issues](https://github.com/your-org/rewind/issues)
 - Email: dev@rewind.example.com
 
----
+--- -->
 
 <div align="center">
 
