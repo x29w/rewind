@@ -31,10 +31,10 @@ export const AiAnalysisPage: React.FC = () => {
     setError(null);
 
     try {
-      // 模拟 API 调用
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // TODO: Replace with actual API call
+      await Promise.resolve();
 
-      // 模拟数据
+      // Mock data - replace with actual API response
       const mockAnalysis: AnalysisResult = {
         rootCause: "The error occurs because the code attempts to access the 'data' property on an undefined object. This typically happens when an API response is not properly validated before accessing its properties.",
         possibleReasons: [
@@ -71,8 +71,8 @@ export const AiAnalysisPage: React.FC = () => {
     setError(null);
 
     try {
-      // 模拟 AI 分析
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      // TODO: Replace with actual AI analysis API call
+      await Promise.resolve();
       await fetchAnalysis();
     } catch (err) {
       setError('AI analysis failed');

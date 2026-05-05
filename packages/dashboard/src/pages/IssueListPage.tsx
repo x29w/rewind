@@ -129,11 +129,19 @@ export const IssueListPage: React.FC = () => {
   ];
 
   useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setIssues(mockIssues);
-      setLoading(false);
-    }, 500);
+    // TODO: Replace with actual API call
+    const loadIssues = async () => {
+      setLoading(true);
+      try {
+        // Simulate API call - replace with actual API
+        await Promise.resolve();
+        setIssues(mockIssues);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadIssues();
   }, []);
 
   return (

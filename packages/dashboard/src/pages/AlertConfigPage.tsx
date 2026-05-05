@@ -135,10 +135,16 @@ export const AlertConfigPage: React.FC = () => {
   };
 
   const testAlert = async (channel: string) => {
-    message.loading(`Sending test alert to ${channel}...`);
-    setTimeout(() => {
+    const hide = message.loading(`Sending test alert to ${channel}...`);
+    try {
+      // TODO: Replace with actual API call
+      await Promise.resolve();
+      hide();
       message.success(`Test alert sent to ${channel}`);
-    }, 1000);
+    } catch (error) {
+      hide();
+      message.error('Failed to send test alert');
+    }
   };
 
   return (
