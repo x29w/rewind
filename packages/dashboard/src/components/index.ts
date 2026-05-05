@@ -1,9 +1,9 @@
 /**
- * 组件统一导出
- * Components Unified Export
- * コンポーネント統一エクスポート
- * 元件統一匯出
+ * 组件导出
+ * Component Exports
+ * コンポーネントエクスポート
+ * 元件匯出
  */
 
-export * from './breadcrumb-timeline';
-export * from './stack-trace';
+export { StackTrace } from './stack-trace';
+export { BreadcrumbTimeline } from './breadcrumb-timeline';
