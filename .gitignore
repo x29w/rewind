@@ -192,6 +192,23 @@ deployment-report-*.txt
 # Keep hooks (team shared), ignore AI working files
 .kiro
 
+# ============================================
+# Package-Specific Build Outputs
+# ============================================
+# Dashboard specific
+packages/dashboard/dist/
+packages/dashboard/dist-ssr/
+packages/dashboard/*.local
+
+# Server specific  
+packages/server/dist/
+
+# SDK specific
+packages/sdk/dist/
+
+# Shared package
+packages/shared/dist/
+
 
 # ============================================
 # Temporary Setup/Status Files
