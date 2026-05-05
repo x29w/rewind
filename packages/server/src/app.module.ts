@@ -14,6 +14,7 @@ import { AppService } from './app.service';
 import { HealthController } from './health/health.controller';
 import { PrismaModule } from './prisma/prisma.module';
 import { IngestionModule } from './ingestion/ingestion.module';
+import { AiModule } from './ai/ai.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { IngestionModule } from './ingestion/ingestion.module';
     TerminusModule,
     PrismaModule,
     IngestionModule,
+    AiModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService],
