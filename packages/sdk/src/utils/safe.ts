@@ -6,17 +6,18 @@
  */
 
 /**
- * 安全执行函数，捕获错误
- * Safely execute function, catch errors
- * 関数を安全に実行し、エラーをキャッチ
- * 安全執行函數，捕獲錯誤
+ * Safe execution wrapper
  * 
+ * @description_zh 安全执行包装器，捕获错误
+ * @description_en Safe execution wrapper, catch errors
+ * @description_ja 安全実行ラッパー、エラーをキャッチ
+ * @description_tw 安全執行包裝器，捕獲錯誤
  * @param fn - 要执行的函数 / Function to execute / 実行する関数 / 要執行的函數
  * @param context - 错误上下文 / Error context / エラーコンテキスト / 錯誤上下文
  * @param fallback - 失败时的回退值 / Fallback value on failure / 失敗時のフォールバック値 / 失敗時的回退值
  * @returns 执行结果或回退值 / Execution result or fallback / 実行結果またはフォールバック / 執行結果或回退值
  */
-export function safeExecute<T>(
+export const safeExecute = <T>(
   fn: () => T,
   context: string = 'Unknown',
   fallback?: T
@@ -30,17 +31,18 @@ export function safeExecute<T>(
 }
 
 /**
- * 安全执行异步函数
- * Safely execute async function
- * 非同期関数を安全に実行
- * 安全執行異步函數
+ * Safe async execution wrapper
  * 
+ * @description_zh 安全执行异步函数包装器
+ * @description_en Safe async execution wrapper
+ * @description_ja 安全非同期実行ラッパー
+ * @description_tw 安全執行異步函數包裝器
  * @param fn - 要执行的异步函数 / Async function to execute / 実行する非同期関数 / 要執行的異步函數
  * @param context - 错误上下文 / Error context / エラーコンテキスト / 錯誤上下文
  * @param fallback - 失败时的回退值 / Fallback value on failure / 失敗時のフォールバック値 / 失敗時的回退值
  * @returns 执行结果或回退值 / Execution result or fallback / 実行結果またはフォールバック / 執行結果或回退值
  */
-export async function safeExecuteAsync<T>(
+export const safeExecuteAsync = async <T>(
   fn: () => Promise<T>,
   context: string = 'Unknown',
   fallback?: T
@@ -54,16 +56,17 @@ export async function safeExecuteAsync<T>(
 }
 
 /**
- * 节流函数
- * Throttle function
- * スロットル関数
- * 節流函數
+ * Throttle function execution
  * 
+ * @description_zh 节流函数执行
+ * @description_en Throttle function execution
+ * @description_ja 関数実行をスロットル
+ * @description_tw 節流函數執行
  * @param fn - 要节流的函数 / Function to throttle / スロットルする関数 / 要節流的函數
  * @param delay - 延迟时间（毫秒）/ Delay time (ms) / 遅延時間（ミリ秒）/ 延遲時間（毫秒）
  * @returns 节流后的函数 / Throttled function / スロットルされた関数 / 節流後的函數
  */
-export function throttle<T extends (...args: any[]) => any>(
+export const throttle = <T extends (...args: any[]) => any>(
   fn: T,
   delay: number
 ): (...args: Parameters<T>) => void {
@@ -89,16 +92,17 @@ export function throttle<T extends (...args: any[]) => any>(
 }
 
 /**
- * 防抖函数
- * Debounce function
- * デバウンス関数
- * 防抖函數
+ * Debounce function execution
  * 
+ * @description_zh 防抖函数执行
+ * @description_en Debounce function execution
+ * @description_ja 関数実行をデバウンス
+ * @description_tw 防抖函數執行
  * @param fn - 要防抖的函数 / Function to debounce / デバウンスする関数 / 要防抖的函數
  * @param delay - 延迟时间（毫秒）/ Delay time (ms) / 遅延時間（ミリ秒）/ 延遲時間（毫秒）
  * @returns 防抖后的函数 / Debounced function / デバウンスされた関数 / 防抖後的函數
  */
-export function debounce<T extends (...args: any[]) => any>(
+export const debounce = <T extends (...args: any[]) => any>(
   fn: T,
   delay: number
 ): (...args: Parameters<T>) => void {

@@ -31,15 +31,16 @@ const SENSITIVE_KEYS = [
 ];
 
 /**
- * URL 脱敏
- * Sanitize URL
- * URL をサニタイズ
- * URL 脫敏
+ * Sanitize URL by removing sensitive query parameters
  * 
- * @param url - 原始 URL / Original URL / 元の URL / 原始 URL
+ * @description_zh 通过移除敏感查询参数来脱敏 URL
+ * @description_en Sanitize URL by removing sensitive query parameters
+ * @description_ja 機密なクエリパラメータを削除してURLをサニタイズ
+ * @description_tw 透過移除敏感查詢參數來脫敏 URL
+ * @param url - 原始 URL / Original URL / 元のURL / 原始 URL
  * @returns 脱敏后的 URL / Sanitized URL / サニタイズされた URL / 脫敏後的 URL
  */
-export function sanitizeUrl(url: string): string {
+export const sanitizeUrl = (url: string): string => {
   try {
     const urlObj = new URL(url);
     
@@ -64,29 +65,31 @@ export function sanitizeUrl(url: string): string {
 }
 
 /**
- * 检查是否为敏感键名
- * Check if key is sensitive
- * キーが機密かどうかを確認
- * 檢查是否為敏感鍵名
+ * Check if a query parameter key is sensitive
  * 
- * @param key - 键名 / Key name / キー名 / 鍵名
+ * @description_zh 检查查询参数键是否敏感
+ * @description_en Check if a query parameter key is sensitive
+ * @description_ja クエリパラメータキーが機密かどうかをチェック
+ * @description_tw 檢查查詢參數鍵是否敏感
+ * @param key - 参数键 / Parameter key / パラメータキー / 參數鍵
  * @returns 是否敏感 / Is sensitive / 機密かどうか / 是否敏感
  */
-function isSensitiveKey(key: string): boolean {
+const isSensitiveKey = (key: string): boolean => {
   const lowerKey = key.toLowerCase();
   return SENSITIVE_KEYS.some(sensitiveKey => lowerKey.includes(sensitiveKey));
 }
 
 /**
- * 从 URL 中提取路径名
- * Extract pathname from URL
- * URL からパス名を抽出
- * 從 URL 中提取路徑名
+ * Get pathname from URL
  * 
- * @param url - URL 字符串 / URL string / URL 文字列 / URL 字串
+ * @description_zh 从 URL 中获取路径名
+ * @description_en Get pathname from URL
+ * @description_ja URLからパス名を取得
+ * @description_tw 從 URL 中取得路徑名
+ * @param url - URL 字符串 / URL string / URL文字列 / URL 字串
  * @returns 路径名 / Pathname / パス名 / 路徑名
  */
-export function getPathname(url: string): string {
+export const getPathname = (url: string): string => {
   try {
     const urlObj = new URL(url);
     return urlObj.pathname;
@@ -101,15 +104,16 @@ export function getPathname(url: string): string {
 }
 
 /**
- * 获取 URL 的域名
  * Get domain from URL
- * URL のドメインを取得
- * 獲取 URL 的域名
  * 
- * @param url - URL 字符串 / URL string / URL 文字列 / URL 字串
+ * @description_zh 从 URL 中获取域名
+ * @description_en Get domain from URL
+ * @description_ja URLからドメインを取得
+ * @description_tw 從 URL 中取得域名
+ * @param url - URL 字符串 / URL string / URL文字列 / URL 字串
  * @returns 域名 / Domain / ドメイン / 域名
  */
-export function getDomain(url: string): string {
+export const getDomain = (url: string): string => {
   try {
     const urlObj = new URL(url);
     return urlObj.hostname;

@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { Card, Button, Spin, Alert, Divider, Tag, List, Typography } from 'antd';
+import { Card, Button, Spin, Alert, Tag, List, Typography } from 'antd';
 import { BulbOutlined, ThunderboltOutlined, LinkOutlined } from '@ant-design/icons';
 import { useParams } from '@tanstack/react-router';
 

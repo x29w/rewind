@@ -54,11 +54,35 @@
 ### 1.2 类型系统
 
 #### 类型声明位置
-- 所有类型都在各自模块下的 	ypes/index.d.ts 文件中声明
+- **所有类型都在各自模块下的 types/ 文件夹中的 .d.ts 文件中声明**
+- 按业务模块分离 .d.ts 文件，每个文件最多包含一个 namespace
 - 使用 declare namespace 组织类型，避免命名冲突
 - 使用时采用 Namespace.Interface 或 Namespace.Type 的方式引用
-- **禁止**单独创建 .ts 文件来声明类型
+- **禁止**在除 types/ 文件夹之外的地方声明类型
 - **禁止**通过 import 导入类型（除了从 @rewind-dev/shared 导入共享类型）
+
+#### 模块类型组织
+- **SDK**: `packages/sdk/src/types/utils.d.ts` - SDK 工具函数相关类型
+- **Server**: 按业务模块分离的 .d.ts 文件
+  - `packages/server/src/types/dto.d.ts` - 数据传输对象类型
+  - `packages/server/src/types/ai.d.ts` - AI 服务相关类型
+  - `packages/server/src/types/alert.d.ts` - 告警服务相关类型
+  - `packages/server/src/types/project.d.ts` - 项目服务相关类型
+  - `packages/server/src/types/issue.d.ts` - 问题服务相关类型
+  - `packages/server/src/types/ingestion.d.ts` - 摄取服务相关类型
+  - `packages/server/src/types/entity.d.ts` - 数据库实体类型
+  - `packages/server/src/types/config.d.ts` - 配置相关类型
+  - `packages/server/src/types/utils.d.ts` - 工具函数相关类型
+  - `packages/server/src/types/middleware.d.ts` - 中间件相关类型
+  - `packages/server/src/types/index.d.ts` - 入口文件，引用所有业务模块
+- **Dashboard**: 按业务模块分离的 .d.ts 文件
+  - `packages/dashboard/src/types/api.d.ts` - API 通用类型
+  - `packages/dashboard/src/types/auth.d.ts` - 认证相关类型
+  - `packages/dashboard/src/types/project.d.ts` - 项目相关类型
+  - `packages/dashboard/src/types/issue.d.ts` - 问题相关类型
+  - `packages/dashboard/src/types/ai.d.ts` - AI 分析相关类型
+  - `packages/dashboard/src/types/alert.d.ts` - 告警配置相关类型
+- **Shared**: `packages/shared/src/index.d.ts` - 跨应用共享类型
 
 #### 共享类型包
 - 跨应用共享的类型定义在 @rewind-dev/shared 包中
@@ -67,32 +91,98 @@
 
 **示例**：
 
-\\\	ypescript
-// ✅ 正确：在模块内声明 namespace
-// packages/sdk/src/core/types/index.d.ts
-declare namespace SDK {
-  interface Config {
-    dsn: string;
-    appId: string;
-    appVersion: string;
+```typescript
+// ✅ 正确：在模块 types/ 文件夹中按业务模块声明 namespace
+// packages/sdk/src/types/utils.d.ts
+declare namespace Utils {
+  interface GetElementPathParams {
+    element: HTMLElement;
   }
-  
-  interface Event {
-    type: string;
-    timestamp: number;
-    data: Record<string, any>;
+}
+
+// packages/server/src/types/ai.d.ts
+declare namespace AI {
+  interface AnalyzeIssueParams {
+    issueId: string;
+  }
+}
+
+// packages/dashboard/src/types/auth.d.ts
+declare namespace Auth {
+  interface LoginParams {
+    data: {
+      email: string;
+      password: string;
+    };
   }
 }
 
 // 使用
-const config: SDK.Config = { ... };
+const result = getElementPath({ element });
+const analysis = await analyzeIssue({ issueId: '123' });
+const loginResult = await loginService({ data: { email, password } });
 
-// ❌ 错误：单独的 .ts 文件
-// types/config.ts
-export interface Config { ... }
-\\\
+// ❌ 错误：在其他文件中声明类型
+// utils/dom.ts
+export interface GetElementPathParams { ... }
 
-### 1.2 代码规范
+// ❌ 错误：一个文件中包含多个 namespace
+// packages/server/src/types/services.d.ts
+declare namespace AI { ... }
+declare namespace Alert { ... } // 应该分离到不同文件
+```
+
+### 1.3 函数参数规范
+
+#### 参数对象化
+- **所有函数的入参尽可能都使用对象形式**，这样没有顺序要求，使用更便捷
+- 即使只有一个参数，也建议使用对象形式以便后续扩展
+- 对象参数必须有对应的 TypeScript 接口定义
+
+#### API 请求函数规范
+- 请求文件中不使用对象形式，而是一个个独立的方法
+- 方法命名格式：`{动作}Service`，如 `loginService`、`getUserService`
+- 使用统一的 `request` 函数进行 HTTP 请求
+- 通过泛型确保返回值类型安全
+
+**示例**：
+
+```typescript
+// ✅ 正确：对象参数形式
+export const getElementPath = (params: SDK.Utils.GetElementPathParams): string => {
+  const { element } = params;
+  // ...
+};
+
+// 使用
+const path = getElementPath({ element: document.body });
+
+// ✅ 正确：API 服务方法
+export const loginService = async (params: Dashboard.API.Auth.LoginParams): Promise<Dashboard.API.Auth.LoginResponse> => {
+  return await request<Dashboard.API.Auth.LoginResponse>({
+    method: 'POST',
+    url: '/auth/login',
+    data: params.data,
+  });
+};
+
+// 使用
+const result = await loginService({ 
+  data: { email: 'user@example.com', password: 'password' } 
+});
+
+// ❌ 错误：多个独立参数
+export const getElementPath = (element: HTMLElement, maxDepth?: number): string => {
+  // ...
+};
+
+// ❌ 错误：API 对象形式
+export const authApi = {
+  login: async (data: LoginData) => { ... }
+};
+```
+
+### 1.4 代码规范
 
 #### 导入规则
 - **禁止**使用动态 import() 导入任何模块
@@ -219,6 +309,9 @@ import { usedFunction } from './utils';
 
 ### 1.7 函数声明
 尽量都使用箭头函数
+
+### 请求相关
+单独抽离出文件做axios的实例配置，然后按照应用业务模块区分不同文件，例如user，则user.ts，内容为发起请求的函数，通过泛型来得知返回值，标注好入参，入参统一为data:interface或者params:interface,根据实际方法来确定
 
 ## 二、SDK 开发规范
 

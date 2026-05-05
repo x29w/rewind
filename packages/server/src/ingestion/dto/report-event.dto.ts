@@ -1,10 +1,10 @@
 /**
  * Event Report DTO
  * 
- * @description_zh ÊÂ¼şÉÏ±¨Êı¾İ´«Êä¶ÔÏó
+ * @description_zh äº‹ä»¶ä¸ŠæŠ¥æ•°æ®ä¼ è¾“å¯¹è±¡
  * @description_en Event report data transfer object
- * @description_ja ¥¤¥Ù¥ó¥È¥ì¥İ©`¥È¥Ç©`¥¿ÜËÍ¥ª¥Ö¥¸¥§¥¯¥È
- * @description_tw ÊÂ¼şÉÏˆóÙYÁÏ‚÷İ”Îï¼ş
+ * @description_ja ã‚¤ãƒ™ãƒ³ãƒˆãƒ¬ãƒãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿è»¢é€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @description_tw äº‹ä»¶ä¸Šå ±è³‡æ–™å‚³è¼¸ç‰©ä»¶
  */
 
 import {
@@ -22,10 +22,10 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 /**
  * Event Level Enum
  * 
- * @description_zh ÊÂ¼ş¼¶±ğÃ¶¾Ù
+ * @description_zh äº‹ä»¶çº§åˆ«æšä¸¾
  * @description_en Event severity level
- * @description_ja ¥¤¥Ù¥ó¥È¥ì¥Ù¥ëÁĞ’¤
- * @description_tw ÊÂ¼ş¼‰„eÁĞÅe
+ * @description_ja ã‚¤ãƒ™ãƒ³ãƒˆãƒ¬ãƒ™ãƒ«åˆ—æŒ™
+ * @description_tw äº‹ä»¶ç´šåˆ¥åˆ—èˆ‰
  */
 export enum EventLevel {
   FATAL = 'fatal',
@@ -37,10 +37,10 @@ export enum EventLevel {
 /**
  * Event Type Enum
  * 
- * @description_zh ÊÂ¼şÀàĞÍÃ¶¾Ù
+ * @description_zh äº‹ä»¶ç±»å‹æšä¸¾
  * @description_en Event type classification
- * @description_ja ¥¤¥Ù¥ó¥È¥¿¥¤¥×ÁĞ’¤
- * @description_tw ÊÂ¼şîĞÍÁĞÅe
+ * @description_ja ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—åˆ—æŒ™
+ * @description_tw äº‹ä»¶é¡å‹åˆ—èˆ‰
  */
 export enum EventType {
   ERROR = 'error',
@@ -53,14 +53,14 @@ export enum EventType {
 /**
  * Breadcrumb DTO
  * 
- * @description_zh Ãæ°üĞ¼Êı¾İ¶ÔÏó
+ * @description_zh ï¿½ï¿½ï¿½Ğ¼ï¿½ï¿½ï¿½İ¶ï¿½ï¿½ï¿½
  * @description_en User action breadcrumb
- * @description_ja ¥Ö¥ì¥Ã¥É¥¯¥é¥à¥Ç©`¥¿
- * @description_tw üI°üĞ¼ÙYÁÏÎï¼ş
+ * @description_ja ï¿½Ö¥ï¿½Ã¥É¥ï¿½ï¿½ï¿½ï¿½Ç©`ï¿½ï¿½
+ * @description_tw ï¿½Iï¿½ï¿½Ğ¼ï¿½Yï¿½ï¿½ï¿½ï¿½ï¿½
  */
 export class BreadcrumbDto {
   /**
-   * @description_zh Ãæ°üĞ¼ÀàĞÍ
+   * @description_zh ï¿½ï¿½ï¿½Ğ¼ï¿½ï¿½ï¿½ï¿½
    * @description_en Breadcrumb type
    * @example "click"
    */
@@ -69,7 +69,7 @@ export class BreadcrumbDto {
   type: string;
 
   /**
-   * @description_zh Ãæ°üĞ¼·ÖÀà
+   * @description_zh ï¿½ï¿½ï¿½Ğ¼ï¿½ï¿½ï¿½ï¿½
    * @description_en Breadcrumb category
    * @example "user"
    */
@@ -78,7 +78,7 @@ export class BreadcrumbDto {
   category: string;
 
   /**
-   * @description_zh Ãæ°üĞ¼ÏûÏ¢
+   * @description_zh ï¿½ï¿½ï¿½Ğ¼ï¿½ï¿½Ï¢
    * @description_en Breadcrumb message
    */
   @ApiPropertyOptional({ description: 'Breadcrumb message' })
@@ -87,7 +87,7 @@ export class BreadcrumbDto {
   message?: string;
 
   /**
-   * @description_zh ¸½¼ÓÊı¾İ
+   * @description_zh ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
    * @description_en Additional data
    */
   @ApiPropertyOptional({ description: 'Additional data' })
@@ -96,7 +96,7 @@ export class BreadcrumbDto {
   data?: Record<string, any>;
 
   /**
-   * @description_zh Ê±¼ä´Á
+   * @description_zh Ê±ï¿½ï¿½ï¿½
    * @description_en Timestamp in milliseconds
    */
   @ApiProperty({ description: 'Timestamp in milliseconds', example: 1704067200000 })
@@ -107,14 +107,14 @@ export class BreadcrumbDto {
 /**
  * Device Information DTO
  * 
- * @description_zh Éè±¸ĞÅÏ¢Êı¾İ¶ÔÏó
+ * @description_zh ï¿½è±¸ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½İ¶ï¿½ï¿½ï¿½
  * @description_en Device information
- * @description_ja ¥Ç¥Ğ¥¤¥¹Çéˆó
- * @description_tw ÑbÖÃÙYÓÎï¼ş
+ * @description_ja ï¿½Ç¥Ğ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @description_tw ï¿½bï¿½ï¿½ï¿½YÓï¿½ï¿½ï¿½
  */
 export class DeviceDto {
   /**
-   * @description_zh ÓÃ»§´úÀí×Ö·û´®
+   * @description_zh ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½
    * @description_en User agent string
    */
   @ApiProperty({ description: 'User agent string' })
@@ -122,7 +122,7 @@ export class DeviceDto {
   userAgent: string;
 
   /**
-   * @description_zh Æ½Ì¨ÀàĞÍ
+   * @description_zh Æ½Ì¨ï¿½ï¿½ï¿½ï¿½
    * @description_en Platform type
    * @example "Windows"
    */
@@ -131,7 +131,7 @@ export class DeviceDto {
   platform: string;
 
   /**
-   * @description_zh ÓïÑÔÉèÖÃ
+   * @description_zh ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
    * @description_en Language setting
    * @example "zh-CN"
    */
@@ -140,7 +140,7 @@ export class DeviceDto {
   language: string;
 
   /**
-   * @description_zh ÆÁÄ»·Ö±æÂÊ
+   * @description_zh ï¿½ï¿½Ä»ï¿½Ö±ï¿½ï¿½ï¿½
    * @description_en Screen resolution
    * @example "1920x1080"
    */
@@ -150,7 +150,7 @@ export class DeviceDto {
   screenResolution?: string;
 
   /**
-   * @description_zh ÊÓ¿Ú´óĞ¡
+   * @description_zh ï¿½Ó¿Ú´ï¿½Ğ¡
    * @description_en Viewport size
    * @example "1920x969"
    */
@@ -160,7 +160,7 @@ export class DeviceDto {
   viewportSize?: string;
 
   /**
-   * @description_zh ÏñËØ±È
+   * @description_zh ï¿½ï¿½ï¿½Ø±ï¿½
    * @description_en Device pixel ratio
    * @example 2
    */
@@ -173,14 +173,14 @@ export class DeviceDto {
 /**
  * Network Information DTO
  * 
- * @description_zh ÍøÂçĞÅÏ¢Êı¾İ¶ÔÏó
+ * @description_zh ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½İ¶ï¿½ï¿½ï¿½
  * @description_en Network information
- * @description_ja ¥Í¥Ã¥È¥ï©`¥¯Çéˆó
- * @description_tw ¾WÂ·ÙYÓÎï¼ş
+ * @description_ja ï¿½Í¥Ã¥È¥ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @description_tw ï¿½WÂ·ï¿½YÓï¿½ï¿½ï¿½
  */
 export class NetworkDto {
   /**
-   * @description_zh ÓĞĞ§Á¬½ÓÀàĞÍ
+   * @description_zh ï¿½ï¿½Ğ§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
    * @description_en Effective connection type
    * @example "4g"
    */
@@ -190,7 +190,7 @@ export class NetworkDto {
   effectiveType?: string;
 
   /**
-   * @description_zh ÏÂĞĞËÙ¶È (Mbps)
+   * @description_zh ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½ (Mbps)
    * @description_en Downlink speed in Mbps
    * @example 10
    */
@@ -200,7 +200,7 @@ export class NetworkDto {
   downlink?: number;
 
   /**
-   * @description_zh Íù·µÊ±¼ä (ms)
+   * @description_zh ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ (ms)
    * @description_en Round-trip time in ms
    * @example 50
    */
@@ -213,14 +213,14 @@ export class NetworkDto {
 /**
  * Report Event DTO
  * 
- * @description_zh ÊÂ¼şÉÏ±¨Ö÷Êı¾İ¶ÔÏó
+ * @description_zh ï¿½Â¼ï¿½ï¿½Ï±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ¶ï¿½ï¿½ï¿½
  * @description_en Main event report data object
- * @description_ja ¥¤¥Ù¥ó¥È¥ì¥İ©`¥È¥á¥¤¥ó¥Ç©`¥¿
- * @description_tw ÊÂ¼şÉÏˆóÖ÷ÙYÁÏÎï¼ş
+ * @description_ja ï¿½ï¿½ï¿½Ù¥ï¿½È¥ï¿½İ©`ï¿½È¥á¥¤ï¿½ï¿½Ç©`ï¿½ï¿½
+ * @description_tw ï¿½Â¼ï¿½ï¿½Ïˆï¿½ï¿½ï¿½ï¿½Yï¿½ï¿½ï¿½ï¿½ï¿½
  */
 export class ReportEventDto {
   /**
-   * @description_zh ÊÂ¼şÀàĞÍ
+   * @description_zh ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½
    * @description_en Event type
    */
   @ApiProperty({ enum: EventType, description: 'Event type', example: EventType.ERROR })
@@ -228,7 +228,7 @@ export class ReportEventDto {
   type: EventType;
 
   /**
-   * @description_zh ÊÂ¼ş¼¶±ğ
+   * @description_zh ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½
    * @description_en Event severity level
    */
   @ApiProperty({ enum: EventLevel, description: 'Event severity level', example: EventLevel.ERROR })
@@ -236,7 +236,7 @@ export class ReportEventDto {
   level: EventLevel;
 
   /**
-   * @description_zh ´íÎóÏûÏ¢
+   * @description_zh ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
    * @description_en Error message
    */
   @ApiProperty({ description: 'Error message', example: 'Uncaught TypeError: Cannot read property' })
@@ -244,7 +244,7 @@ export class ReportEventDto {
   message: string;
 
   /**
-   * @description_zh ´íÎó¶ÑÕ»
+   * @description_zh ï¿½ï¿½ï¿½ï¿½ï¿½Õ»
    * @description_en Error stack trace
    */
   @ApiPropertyOptional({ description: 'Error stack trace' })
@@ -253,7 +253,7 @@ export class ReportEventDto {
   stack?: string;
 
   /**
-   * @description_zh ÓÃ»§ID
+   * @description_zh ï¿½Ã»ï¿½ID
    * @description_en User identifier
    */
   @ApiPropertyOptional({ description: 'User identifier' })
@@ -262,7 +262,7 @@ export class ReportEventDto {
   userId?: string;
 
   /**
-   * @description_zh »á»°ID
+   * @description_zh ï¿½á»°ID
    * @description_en Session identifier
    */
   @ApiProperty({ description: 'Session identifier' })
@@ -270,7 +270,7 @@ export class ReportEventDto {
   sessionId: string;
 
   /**
-   * @description_zh Ò³ÃæURL
+   * @description_zh Ò³ï¿½ï¿½URL
    * @description_en Page URL
    */
   @ApiProperty({ description: 'Page URL', example: 'https://example.com/page' })
@@ -278,7 +278,7 @@ export class ReportEventDto {
   pageUrl: string;
 
   /**
-   * @description_zh Ó¦ÓÃ°æ±¾
+   * @description_zh Ó¦ï¿½Ã°æ±¾
    * @description_en Application version
    */
   @ApiPropertyOptional({ description: 'Application version', example: '1.0.0' })
@@ -287,7 +287,7 @@ export class ReportEventDto {
   appVersion?: string;
 
   /**
-   * @description_zh ÔËĞĞ»·¾³
+   * @description_zh ï¿½ï¿½ï¿½Ğ»ï¿½ï¿½ï¿½
    * @description_en Runtime environment
    */
   @ApiPropertyOptional({ description: 'Runtime environment', example: 'production' })
@@ -296,7 +296,7 @@ export class ReportEventDto {
   environment?: string;
 
   /**
-   * @description_zh ×Ô¶¨Òå±êÇ©
+   * @description_zh ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Ç©
    * @description_en Custom tags
    */
   @ApiPropertyOptional({ description: 'Custom tags' })
@@ -305,7 +305,7 @@ export class ReportEventDto {
   tags?: Record<string, string>;
 
   /**
-   * @description_zh Ãæ°üĞ¼ÁĞ±í
+   * @description_zh ï¿½ï¿½ï¿½Ğ¼ï¿½Ğ±ï¿½
    * @description_en Breadcrumb list
    */
   @ApiProperty({ type: [BreadcrumbDto], description: 'Breadcrumb list' })
@@ -315,7 +315,7 @@ export class ReportEventDto {
   breadcrumbs: BreadcrumbDto[];
 
   /**
-   * @description_zh Éè±¸ĞÅÏ¢
+   * @description_zh ï¿½è±¸ï¿½ï¿½Ï¢
    * @description_en Device information
    */
   @ApiProperty({ type: DeviceDto, description: 'Device information' })
@@ -325,7 +325,7 @@ export class ReportEventDto {
   device: DeviceDto;
 
   /**
-   * @description_zh ÍøÂçĞÅÏ¢
+   * @description_zh ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
    * @description_en Network information
    */
   @ApiPropertyOptional({ type: NetworkDto, description: 'Network information' })
@@ -336,7 +336,7 @@ export class ReportEventDto {
   network?: NetworkDto;
 
   /**
-   * @description_zh ÊÂ¼şÊ±¼ä´Á
+   * @description_zh ï¿½Â¼ï¿½Ê±ï¿½ï¿½ï¿½
    * @description_en Event timestamp
    */
   @ApiProperty({ description: 'Event timestamp in milliseconds', example: 1704067200000 })
@@ -344,7 +344,7 @@ export class ReportEventDto {
   timestamp: number;
 
   /**
-   * @description_zh ¶îÍâÊı¾İ
+   * @description_zh ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
    * @description_en Extra data
    */
   @ApiPropertyOptional({ description: 'Extra data' })

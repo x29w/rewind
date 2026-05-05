@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { Card, Table, Tag, DatePicker, Space, Select, Statistic, Row, Col } from 'antd';
+import { Card, Table, DatePicker, Space, Select, Statistic, Row, Col } from 'antd';
 import { Line } from '@ant-design/plots';
 
 const { RangePicker } = DatePicker;
