@@ -140,4 +140,22 @@ declare namespace Issue {
     language: string;
     timezone: string;
   }
+
+  /**
+   * 问题级别颜色映射
+   * @description_zh 问题级别对应的 Ant Design 颜色
+   * @description_en Ant Design color mapping for issue levels
+   * @description_ja 問題レベルに対応する Ant Design カラー
+   * @description_tw 問題級別對應的 Ant Design 顏色
+   */
+  type LevelColorMap = Record<'fatal' | 'error' | 'warning' | 'info', string>;
+
+  /**
+   * 问题状态颜色映射
+   * @description_zh 问题状态对应的 Ant Design 颜色
+   * @description_en Ant Design color mapping for issue statuses
+   * @description_ja 問題ステータスに対応する Ant Design カラー
+   * @description_tw 問題狀態對應的 Ant Design 顏色
+   */
+  type StatusColorMap = Record<'open' | 'resolved' | 'ignored' | 'regressed', string>;
 }

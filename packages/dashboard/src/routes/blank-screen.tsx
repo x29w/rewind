@@ -6,7 +6,7 @@
  */
 
 import { createFileRoute } from '@tanstack/react-router';
-import { BlankScreenPage } from '../pages/BlankScreenPage';
+import { BlankScreenPage } from '../pages/blank-screen-page';
 
 export const Route = createFileRoute('/blank-screen')({
   component: BlankScreenPage,

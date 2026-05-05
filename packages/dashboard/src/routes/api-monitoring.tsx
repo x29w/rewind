@@ -6,7 +6,7 @@
  */
 
 import { createFileRoute } from '@tanstack/react-router';
-import { ApiMonitoringPage } from '../pages/ApiMonitoringPage';
+import { ApiMonitoringPage } from '../pages/api-monitoring-page';
 
 export const Route = createFileRoute('/api-monitoring')({
   component: ApiMonitoringPage,

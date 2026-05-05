@@ -6,7 +6,7 @@
  */
 
 import { createFileRoute } from '@tanstack/react-router';
-import { AlertConfigPage } from '../pages/AlertConfigPage';
+import { AlertConfigPage } from '../pages/alert-config-page';
 
 export const Route = createFileRoute('/alerts')({
   component: AlertConfigPage,

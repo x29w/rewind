@@ -6,7 +6,7 @@
  */
 
 import { createFileRoute } from '@tanstack/react-router';
-import { ProjectListPage } from '../pages/ProjectListPage';
+import { ProjectListPage } from '../pages/project-list-page';
 
 export const Route = createFileRoute('/projects')({
   component: ProjectListPage,

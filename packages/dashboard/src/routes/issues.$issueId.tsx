@@ -6,7 +6,7 @@
  */
 
 import { createFileRoute } from '@tanstack/react-router';
-import { IssueDetailPage } from '../pages/IssueDetailPage';
+import { IssueDetailPage } from '../pages/issue-detail-page';
 
 export const Route = createFileRoute('/issues/$issueId')({
   component: IssueDetailPage,

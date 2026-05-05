@@ -1,7 +1,14 @@
-﻿import { configureStore } from '@reduxjs/toolkit';
-import authReducer from './slices/auth-slice.ts';
-import projectReducer from './slices/project-slice.ts';
-import issueReducer from './slices/issue-slice.ts';
+﻿/**
+ * Redux Store 配置
+ * Redux Store Configuration
+ * Redux ストア設定
+ * Redux Store 配置
+ */
+
+import { configureStore } from '@reduxjs/toolkit';
+import authReducer from './auth.slice';
+import projectReducer from './project.slice';
+import issueReducer from './issue.slice';
 
 export const store = configureStore({
   reducer: {
@@ -9,7 +16,10 @@ export const store = configureStore({
     project: projectReducer,
     issue: issueReducer,
   },
-  devTools: process.env.NODE_ENV !== 'production',
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
