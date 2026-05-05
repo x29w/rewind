@@ -12,6 +12,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@ant-design/icons": "^6.2.2",
     "@ant-design/plots": "^2.6.8",
     "@reduxjs/toolkit": "^2.11.2",
     "@rewind-dev/shared": "workspace:*",

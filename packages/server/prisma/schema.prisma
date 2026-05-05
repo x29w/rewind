@@ -1,4 +1,7 @@
 // Prisma Schema for Rewind Server
+// Rewind ��������ݿ�ģ��
+// Rewind ���`�Щ`�ǩ`���٩`����ǥ�
+// Rewind �ŷ����Y�ώ�ģ��
 
 generator client {
   provider = "prisma-client-js"
@@ -10,6 +13,9 @@ datasource db {
 }
 
 // Application model
+// Ӧ��ģ��
+// ���ץꥱ�`������ǥ�
+// ����ģ��
 model App {
   id        String   @id @default(cuid())
   name      String
@@ -24,6 +30,9 @@ model App {
 }
 
 // Issue model
+// ����ģ��
+// ���}��ǥ�
+// ���}ģ��
 model Issue {
   id          String   @id @default(cuid())
   fingerprint String
@@ -47,13 +56,23 @@ model Issue {
   app    App     @relation(fields: [appId], references: [id])
   events Event[]
 
+  // Unique constraint
   @@unique([appId, fingerprint])
+  // Performance indexes
+  // �����Ż�����
   @@index([appId, status])
+  @@index([appId, lastSeen(sort: Desc)])
   @@index([fingerprint])
+  @@index([level])
+  @@index([type])
+  @@index([appId, status, lastSeen(sort: Desc)])
   @@map("issues")
 }
 
 // Event model
+// �¼�ģ��
+// ���٥�ȥ�ǥ�
+// �¼�ģ��
 model Event {
   id          String   @id @default(cuid())
   issueId     String
@@ -70,8 +89,12 @@ model Event {
   issue Issue @relation(fields: [issueId], references: [id])
   app   App   @relation(fields: [appId], references: [id])
 
+  // Performance indexes
+  // �����Ż�����
   @@index([issueId])
-  @@index([appId, createdAt])
+  @@index([appId, createdAt(sort: Desc)])
   @@index([sessionId])
+  @@index([userId])
+  @@index([issueId, createdAt(sort: Desc)])
   @@map("events")
 }

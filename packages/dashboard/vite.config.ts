@@ -1,25 +1,27 @@
-import { defineConfig } from 'vite';
+import { defineConfig, splitVendorChunkPlugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import { TanStackRouterVite } from '@tanstack/router-vite-plugin';
-import path from 'path';
 
 export default defineConfig({
   plugins: [
-    react(),
     TanStackRouterVite(),
+    react(),
+    splitVendorChunkPlugin(),
   ],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-redux'],
+          'antd-vendor': ['antd', '@ant-design/icons', '@ant-design/plots'],
+          'router-vendor': ['@tanstack/react-router'],
+          'redux-vendor': ['@reduxjs/toolkit'],
+        },
+      },
     },
+    chunkSizeWarningLimit: 1000,
   },
   server: {
     port: 5173,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3000',
-        changeOrigin: true,
-      },
-    },
   },
 });

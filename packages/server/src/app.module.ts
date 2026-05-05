@@ -13,6 +13,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { HealthController } from './health/health.controller';
 import { PrismaModule } from './prisma/prisma.module';
+import { CacheModule } from './cache/cache.module';
 import { IngestionModule } from './ingestion/ingestion.module';
 import { AiModule } from './ai/ai.module';
 import { AlertModule } from './alert/alert.module';
@@ -31,6 +32,7 @@ import { AlertModule } from './alert/alert.module';
     ]),
     TerminusModule,
     PrismaModule,
+    CacheModule,
     IngestionModule,
     AiModule,
     AlertModule,
