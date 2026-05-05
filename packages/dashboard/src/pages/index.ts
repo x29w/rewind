@@ -15,3 +15,4 @@ export { AiAnalysisPage } from './ai-analysis-page';
 export { ApiMonitoringPage } from './api-monitoring-page';
 export { BlankScreenPage } from './blank-screen-page';
 export { SettingsPage } from './settings-page';
+export { PerformancePage } from './performance-page';

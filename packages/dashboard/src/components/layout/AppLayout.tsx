@@ -16,6 +16,7 @@ import {
   BulbOutlined,
   SettingOutlined,
   BellOutlined,
+  RocketOutlined,
 } from '@ant-design/icons';
 
 const { Header, Sider, Content } = Layout;
@@ -35,6 +36,7 @@ export const AppLayout: React.FC = () => {
     if (path === '/') return 'home';
     if (path.startsWith('/issues')) return 'issues';
     if (path.startsWith('/projects')) return 'projects';
+    if (path.startsWith('/performance')) return 'performance';
     if (path.startsWith('/api-monitoring')) return 'api-monitoring';
     if (path.startsWith('/blank-screen')) return 'blank-screen';
     if (path.startsWith('/ai-analysis')) return 'ai-analysis';
@@ -57,6 +59,11 @@ export const AppLayout: React.FC = () => {
       key: 'issues',
       icon: <BugOutlined />,
       label: <Link to="/issues">问题管理</Link>,
+    },
+    {
+      key: 'performance',
+      icon: <RocketOutlined />,
+      label: <Link to="/performance">性能分析</Link>,
     },
     {
       key: 'api-monitoring',

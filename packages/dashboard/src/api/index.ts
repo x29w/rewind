@@ -10,3 +10,4 @@ export * from './project';
 export * from './issue';
 export * from './alert';
 export * from './ai';
+export * from './performance';
