@@ -7,11 +7,13 @@
 ## 系统要求
 
 ### 硬件要求
+
 - **CPU**: 2核心或以上
 - **内存**: 4GB RAM 或以上（推荐 8GB）
 - **存储**: 20GB 可用空间或以上
 
 ### 软件要求
+
 - **操作系统**: Linux (Ubuntu 20.04+, CentOS 7+) / macOS / Windows
 - **Node.js**: 18.x 或以上
 - **pnpm**: 8.x 或以上
@@ -27,7 +29,7 @@
 克隆项目仓库：
 
 ```bash
-git clone https://github.com/your-org/rewind.git
+git clone https://github.com/X29w/rewind.git
 cd rewind
 ```
 
@@ -217,14 +219,14 @@ Nginx 配置示例：
 server {
     listen 80;
     server_name your-domain.com;
-    
+
     root /path/to/rewind/packages/dashboard/dist;
     index index.html;
-    
+
     location / {
         try_files $uri $uri/ /index.html;
     }
-    
+
     location /api {
         proxy_pass http://localhost:3000;
         proxy_http_version 1.1;
@@ -265,16 +267,16 @@ pm2 startup
 server {
     listen 443 ssl http2;
     server_name your-domain.com;
-    
+
     ssl_certificate /path/to/cert.pem;
     ssl_certificate_key /path/to/key.pem;
-    
+
     # Dashboard
     location / {
         root /path/to/rewind/packages/dashboard/dist;
         try_files $uri $uri/ /index.html;
     }
-    
+
     # API
     location /api {
         proxy_pass http://localhost:3000;
@@ -374,7 +376,7 @@ redis-cli ping
 ```typescript
 // packages/server/src/main.ts
 app.enableCors({
-  origin: process.env.CORS_ORIGIN?.split(',') || '*',
+  origin: process.env.CORS_ORIGIN?.split(",") || "*",
   credentials: true,
 });
 ```
@@ -503,7 +505,7 @@ pm2 restart rewind-server
 如遇到问题，请：
 
 1. 查看项目文档：`docs/` 目录
-2. 提交 Issue：https://github.com/your-org/rewind/issues
+2. 提交 Issue：https://github.com/X29w/rewind/issues
 3. 联系技术支持：support@rewind.dev
 
 ---

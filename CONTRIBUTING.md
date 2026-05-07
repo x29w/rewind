@@ -71,6 +71,7 @@ git checkout -b bugfix/your-bug-fix
 ```
 
 Branch naming conventions:
+
 - `feature/*` - New features
 - `bugfix/*` - Bug fixes
 - `docs/*` - Documentation updates
@@ -242,18 +243,18 @@ pnpm test:coverage
 ### Test Structure
 
 ```typescript
-describe('FeatureName', () => {
-  it('should handle normal case', () => {
+describe("FeatureName", () => {
+  it("should handle normal case", () => {
     // Arrange
     // Act
     // Assert
   });
 
-  it('should handle edge case', () => {
+  it("should handle edge case", () => {
     // ...
   });
 
-  it('should handle error case', () => {
+  it("should handle error case", () => {
     // ...
   });
 });
@@ -288,12 +289,14 @@ describe('FeatureName', () => {
 We welcome translations of documentation!
 
 Current languages:
+
 - 简体中文 (Simplified Chinese) - Primary
 - 繁體中文 (Traditional Chinese)
 - English
 - 日本語 (Japanese)
 
 To contribute translations:
+
 1. Check `docs/README.md` for translation status
 2. Translate the document
 3. Submit a PR with the translation
@@ -302,6 +305,7 @@ To contribute translations:
 ## 🐛 Reporting Bugs
 
 Use the [Bug Report template](.github/ISSUE_TEMPLATE/bug_report.md) and include:
+
 - Clear description
 - Steps to reproduce
 - Expected vs actual behavior
@@ -311,6 +315,7 @@ Use the [Bug Report template](.github/ISSUE_TEMPLATE/bug_report.md) and include:
 ## 💡 Suggesting Features
 
 Use the [Feature Request template](.github/ISSUE_TEMPLATE/feature_request.md) and include:
+
 - Feature description
 - Motivation and use case
 - Proposed solution
@@ -318,8 +323,8 @@ Use the [Feature Request template](.github/ISSUE_TEMPLATE/feature_request.md) an
 
 ## 📧 Getting Help
 
-- **Issues**: [GitHub Issues](https://github.com/your-org/rewind/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/your-org/rewind/discussions)
+- **Issues**: [GitHub Issues](https://github.com/X29w/rewind/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/X29w/rewind/discussions)
 - **Email**: dev@rewind.example.com
 
 ## 🙏 Thank You!

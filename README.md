@@ -61,11 +61,11 @@ rewind/
 
 ### Tech Stack
 
-| Application | Tech Stack | Description |
-|-------------|------------|-------------|
-| **SDK** | TypeScript + Rollup | Zero dependencies, gzip < 15KB |
-| **Server** | NestJS + Prisma + PostgreSQL + Redis + BullMQ | Modular architecture, supports horizontal scaling |
-| **Dashboard** | React 18 + Vite + Ant Design 5 + Redux Toolkit + TanStack Router | Type-safe routing, high-performance rendering |
+| Application   | Tech Stack                                                       | Description                                       |
+| ------------- | ---------------------------------------------------------------- | ------------------------------------------------- |
+| **SDK**       | TypeScript + Rollup                                              | Zero dependencies, gzip < 15KB                    |
+| **Server**    | NestJS + Prisma + PostgreSQL + Redis + BullMQ                    | Modular architecture, supports horizontal scaling |
+| **Dashboard** | React 18 + Vite + Ant Design 5 + Redux Toolkit + TanStack Router | Type-safe routing, high-performance rendering     |
 
 ---
 
@@ -82,7 +82,7 @@ rewind/
 
 ```bash
 # Clone the project
-git clone https://github.com/your-org/rewind.git
+git clone https://github.com/X29w/rewind.git
 cd rewind
 
 # Install dependencies
@@ -116,13 +116,13 @@ pnpm add @rewind-dev/sdk
 ```
 
 ```typescript
-import { init } from '@rewind-dev/sdk';
+import { init } from "@rewind-dev/sdk";
 
 init({
-  dsn: 'https://your-server.com/api/v1/report',
-  appId: 'your-app-id',
-  appVersion: '1.0.0',
-  environment: 'production',
+  dsn: "https://your-server.com/api/v1/report",
+  appId: "your-app-id",
+  appVersion: "1.0.0",
+  environment: "production",
 });
 ```
 
@@ -230,8 +230,8 @@ Thanks to all developers who have contributed to the Rewind project!
 
 <!-- ## 📧 Contact
 
-- Project Homepage: [GitHub](https://github.com/your-org/rewind)
-- Issue Tracker: [Issues](https://github.com/your-org/rewind/issues)
+- Project Homepage: [GitHub](https://github.com/X29w/rewind)
+- Issue Tracker: [Issues](https://github.com/X29w/rewind/issues)
 - Email: dev@rewind.example.com
 
 --- -->

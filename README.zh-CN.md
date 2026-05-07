@@ -61,10 +61,10 @@ rewind/
 
 ### 技术栈
 
-| 应用 | 技术栈 | 说明 |
-|------|--------|------|
-| **SDK** | TypeScript + Rollup | 零依赖，gzip < 15KB |
-| **Server** | NestJS + Prisma + PostgreSQL + Redis + BullMQ | 模块化架构，支持水平扩展 |
+| 应用          | 技术栈                                                           | 说明                     |
+| ------------- | ---------------------------------------------------------------- | ------------------------ |
+| **SDK**       | TypeScript + Rollup                                              | 零依赖，gzip < 15KB      |
+| **Server**    | NestJS + Prisma + PostgreSQL + Redis + BullMQ                    | 模块化架构，支持水平扩展 |
 | **Dashboard** | React 18 + Vite + Ant Design 5 + Redux Toolkit + TanStack Router | 类型安全路由，高性能渲染 |
 
 ---
@@ -82,7 +82,7 @@ rewind/
 
 ```bash
 # 克隆项目
-git clone https://github.com/your-org/rewind.git
+git clone https://github.com/X29w/rewind.git
 cd rewind
 
 # 安装依赖
@@ -116,13 +116,13 @@ pnpm add @rewind-dev/sdk
 ```
 
 ```typescript
-import { init } from '@rewind-dev/sdk';
+import { init } from "@rewind-dev/sdk";
 
 init({
-  dsn: 'https://your-server.com/api/v1/report',
-  appId: 'your-app-id',
-  appVersion: '1.0.0',
-  environment: 'production',
+  dsn: "https://your-server.com/api/v1/report",
+  appId: "your-app-id",
+  appVersion: "1.0.0",
+  environment: "production",
 });
 ```
 
@@ -230,8 +230,8 @@ init({
 
 <!-- ## 📧 联系方式
 
-- 项目主页：[GitHub](https://github.com/your-org/rewind)
-- 问题反馈：[Issues](https://github.com/your-org/rewind/issues)
+- 项目主页：[GitHub](https://github.com/X29w/rewind)
+- 问题反馈：[Issues](https://github.com/X29w/rewind/issues)
 - 邮件：dev@rewind.example.com
 
 --- -->

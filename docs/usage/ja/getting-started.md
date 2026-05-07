@@ -45,7 +45,7 @@ Rewind は、3つのコアコンポーネントで構成されるインテリジ
 
 ```bash
 # 1. プロジェクトをクローン
-git clone https://github.com/your-org/rewind.git
+git clone https://github.com/X29w/rewind.git
 cd rewind
 
 # 2. 環境変数を設定
@@ -91,51 +91,51 @@ yarn add @rewind-dev/sdk
 #### 2.2.1 最小統合
 
 ```typescript
-import { init } from '@rewind-dev/sdk';
+import { init } from "@rewind-dev/sdk";
 
 // アプリ開始時に初期化
 init({
-  dsn: 'http://localhost:3000/api/v1/report',  // Serverアドレス
-  appId: 'your-app-id',                        // Dashboardから取得
-  appVersion: '1.0.0',                         // アプリバージョン
-  environment: 'production',                   // 環境識別子
+  dsn: "http://localhost:3000/api/v1/report", // Serverアドレス
+  appId: "your-app-id", // Dashboardから取得
+  appVersion: "1.0.0", // アプリバージョン
+  environment: "production", // 環境識別子
 });
 ```
 
 #### 2.2.2 完全設定
 
 ```typescript
-import { init } from '@rewind-dev/sdk';
+import { init } from "@rewind-dev/sdk";
 
 const client = init({
   // 必須設定
-  dsn: 'http://localhost:3000/api/v1/report',
-  appId: 'your-app-id',
-  appVersion: '1.0.0',
-  
+  dsn: "http://localhost:3000/api/v1/report",
+  appId: "your-app-id",
+  appVersion: "1.0.0",
+
   // オプション設定
-  environment: 'production',           // 環境: development, staging, production
-  sampleRate: 1.0,                    // サンプリングレート: 0.0-1.0、1.0は100%サンプリング
-  maxBreadcrumbs: 100,                // ブレッドクラム最大数
-  enabled: true,                      // SDKを有効にするか
-  debug: false,                       // デバッグモード
-  
+  environment: "production", // 環境: development, staging, production
+  sampleRate: 1.0, // サンプリングレート: 0.0-1.0、1.0は100%サンプリング
+  maxBreadcrumbs: 100, // ブレッドクラム最大数
+  enabled: true, // SDKを有効にするか
+  debug: false, // デバッグモード
+
   // ユーザー情報
   user: {
-    id: 'user-123',
-    email: 'user@example.com',
-    username: 'john_doe'
+    id: "user-123",
+    email: "user@example.com",
+    username: "john_doe",
   },
-  
+
   // カスタムタグ
   tags: {
-    team: 'frontend',
-    feature: 'checkout'
+    team: "frontend",
+    feature: "checkout",
   },
-  
+
   // プラグイン設定
-  enableBlankScreenDetection: true,   // ブランクスクリーン検出を有効
-  enableApiMonitoring: true,          // API監視を有効
+  enableBlankScreenDetection: true, // ブランクスクリーン検出を有効
+  enableApiMonitoring: true, // API監視を有効
 });
 ```
 
@@ -144,7 +144,7 @@ const client = init({
 #### 2.3.1 エラーキャプチャ
 
 ```typescript
-import { getClient } from '@rewind-dev/sdk';
+import { getClient } from "@rewind-dev/sdk";
 
 const client = getClient();
 
@@ -155,10 +155,10 @@ try {
   // 手動でエラーをレポート
   client?.captureError(error, {
     extra: {
-      userId: '123',
-      action: 'checkout',
-      step: 'payment'
-    }
+      userId: "123",
+      action: "checkout",
+      step: "payment",
+    },
   });
 }
 ```
@@ -166,21 +166,21 @@ try {
 #### 2.3.2 ブレッドクラム追加
 
 ```typescript
-import { getClient } from '@rewind-dev/sdk';
+import { getClient } from "@rewind-dev/sdk";
 
 const client = getClient();
 
 // カスタムブレッドクラムを追加
 client?.addBreadcrumb({
-  type: 'user',
-  message: 'ユーザーが購入ボタンをクリック',
+  type: "user",
+  message: "ユーザーが購入ボタンをクリック",
   timestamp: Date.now(),
-  level: 'info',
-  category: 'ui',
+  level: "info",
+  category: "ui",
   data: {
-    buttonId: 'buy-now',
-    productId: 'prod-123'
-  }
+    buttonId: "buy-now",
+    productId: "prod-123",
+  },
 });
 ```
 
@@ -221,37 +221,37 @@ root.render(<App />);
 
 ```typescript
 // src/plugins/monitoring.ts
-import { init } from '@rewind-dev/sdk';
-import type { App } from 'vue';
+import { init } from "@rewind-dev/sdk";
+import type { App } from "vue";
 
 export default {
   install(app: App) {
     const client = init({
       dsn: import.meta.env.VITE_REWIND_DSN,
       appId: import.meta.env.VITE_REWIND_APP_ID,
-      appVersion: import.meta.env.VITE_APP_VERSION || '1.0.0',
+      appVersion: import.meta.env.VITE_APP_VERSION || "1.0.0",
       environment: import.meta.env.MODE,
     });
-    
+
     // グローバルエラーハンドリング
     app.config.errorHandler = (error, instance, info) => {
       client?.captureError(error as Error, {
-        extra: { info, component: instance?.$options.name }
+        extra: { info, component: instance?.$options.name },
       });
     };
-    
-    app.provide('rewindClient', client);
-  }
+
+    app.provide("rewindClient", client);
+  },
 };
 
 // src/main.ts
-import { createApp } from 'vue';
-import App from './App.vue';
-import monitoring from './plugins/monitoring';
+import { createApp } from "vue";
+import App from "./App.vue";
+import monitoring from "./plugins/monitoring";
 
 const app = createApp(App);
 app.use(monitoring);
-app.mount('#app');
+app.mount("#app");
 ```
 
 ---
@@ -289,21 +289,25 @@ app.mount('#app');
 #### 3.2.2 問題詳細
 
 **基本情報**
+
 - エラーメッセージとスタック情報
 - 発生時間と影響ユーザー数
 - エラーレベルとステータス
 
 **ユーザートレース**
+
 - 完全なユーザー操作タイムライン
 - クリック、ナビゲーション、API呼び出し記録
 - エラー発生前の重要な操作
 
 **環境情報**
+
 - ブラウザ、オペレーティングシステム情報
 - 画面解像度、デバイスタイプ
 - ネットワーク状態、ページURL
 
 **AI分析**
+
 - エラー根本原因分析
 - 可能な修正提案
 - 類似問題推奨
@@ -368,8 +372,8 @@ X-API-Key: your-api-key
 
 ```typescript
 // React エラーバウンダリ例
-import React from 'react';
-import { getClient } from '@rewind-dev/sdk';
+import React from "react";
+import { getClient } from "@rewind-dev/sdk";
 
 class ErrorBoundary extends React.Component {
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
@@ -377,11 +381,11 @@ class ErrorBoundary extends React.Component {
     client?.captureError(error, {
       extra: {
         componentStack: errorInfo.componentStack,
-        errorBoundary: true
-      }
+        errorBoundary: true,
+      },
     });
   }
-  
+
   render() {
     // エラーUI レンダリングロジック
   }
@@ -395,24 +399,28 @@ class ErrorBoundary extends React.Component {
 ```typescript
 // 環境とユーザータイプに基づいてサンプリングレートを設定
 const getSampleRate = () => {
-  if (process.env.NODE_ENV === 'development') {
-    return 1.0;  // 開発環境で100%サンプリング
+  if (process.env.NODE_ENV === "development") {
+    return 1.0; // 開発環境で100%サンプリング
   }
-  
+
   const userType = getUserType();
   switch (userType) {
-    case 'internal': return 1.0;    // 内部ユーザー100%
-    case 'beta': return 0.5;        // ベータユーザー50%
-    case 'premium': return 0.2;     // プレミアムユーザー20%
-    default: return 0.05;           // 一般ユーザー5%
+    case "internal":
+      return 1.0; // 内部ユーザー100%
+    case "beta":
+      return 0.5; // ベータユーザー50%
+    case "premium":
+      return 0.2; // プレミアムユーザー20%
+    default:
+      return 0.05; // 一般ユーザー5%
   }
 };
 
 init({
-  dsn: 'your-dsn',
-  appId: 'your-app-id',
-  appVersion: '1.0.0',
-  sampleRate: getSampleRate()
+  dsn: "your-dsn",
+  appId: "your-app-id",
+  appVersion: "1.0.0",
+  sampleRate: getSampleRate(),
 });
 ```
 
@@ -423,6 +431,7 @@ init({
 ### Q1: SDKはアプリケーションパフォーマンスに影響しますか？
 
 **A:** SDKは慎重に最適化されており、アプリケーションパフォーマンスへの影響は最小限です：
+
 - コアパッケージ < 15KB gzip圧縮
 - 非同期レポート、メインスレッドをブロックしない
 - スマートサンプリングでネットワークリクエストを削減
@@ -431,6 +440,7 @@ init({
 ### Q2: 機密データの処理方法は？
 
 **A:** 機密データを保護する複数の方法：
+
 - `beforeSend`コールバックを使用して機密フィールドをフィルター
 - サンプリングレートを設定してデータ収集を削減
 - データ保持期間を設定、定期的なクリーンアップ
@@ -439,6 +449,7 @@ init({
 ### Q3: サポートされているブラウザは？
 
 **A:** SDKはすべてのモダンブラウザをサポート：
+
 - Chrome 60+
 - Firefox 55+
 - Safari 12+
@@ -458,9 +469,9 @@ init({
 
 ### 7.2 コミュニティサポート
 
-- **GitHub Issues**: https://github.com/your-org/rewind/issues
-- **ディスカッション**: https://github.com/your-org/rewind/discussions
-- **変更ログ**: https://github.com/your-org/rewind/releases
+- **GitHub Issues**: https://github.com/X29w/rewind/issues
+- **ディスカッション**: https://github.com/X29w/rewind/discussions
+- **変更ログ**: https://github.com/X29w/rewind/releases
 
 ### 7.3 商用サポート
 

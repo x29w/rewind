@@ -45,7 +45,7 @@ Rewind 是一个智能前端监控平台，由三个核心组件组成：
 
 ```bash
 # 1. 克隆项目
-git clone https://github.com/your-org/rewind.git
+git clone https://github.com/X29w/rewind.git
 cd rewind
 
 # 2. 配置环境变量
@@ -91,51 +91,51 @@ yarn add @rewind-dev/sdk
 #### 2.2.1 最简集成
 
 ```typescript
-import { init } from '@rewind-dev/sdk';
+import { init } from "@rewind-dev/sdk";
 
 // 在应用启动时初始化
 init({
-  dsn: 'http://localhost:3000/api/v1/report',  // Server 地址
-  appId: 'your-app-id',                        // 从 Dashboard 获取
-  appVersion: '1.0.0',                         // 应用版本
-  environment: 'production',                   // 环境标识
+  dsn: "http://localhost:3000/api/v1/report", // Server 地址
+  appId: "your-app-id", // 从 Dashboard 获取
+  appVersion: "1.0.0", // 应用版本
+  environment: "production", // 环境标识
 });
 ```
 
 #### 2.2.2 完整配置
 
 ```typescript
-import { init } from '@rewind-dev/sdk';
+import { init } from "@rewind-dev/sdk";
 
 const client = init({
   // 必需配置
-  dsn: 'http://localhost:3000/api/v1/report',
-  appId: 'your-app-id',
-  appVersion: '1.0.0',
-  
+  dsn: "http://localhost:3000/api/v1/report",
+  appId: "your-app-id",
+  appVersion: "1.0.0",
+
   // 可选配置
-  environment: 'production',           // 环境：development, staging, production
-  sampleRate: 1.0,                    // 采样率：0.0-1.0，1.0 表示 100% 采样
-  maxBreadcrumbs: 100,                // 面包屑最大数量
-  enabled: true,                      // 是否启用 SDK
-  debug: false,                       // 调试模式
-  
+  environment: "production", // 环境：development, staging, production
+  sampleRate: 1.0, // 采样率：0.0-1.0，1.0 表示 100% 采样
+  maxBreadcrumbs: 100, // 面包屑最大数量
+  enabled: true, // 是否启用 SDK
+  debug: false, // 调试模式
+
   // 用户信息
   user: {
-    id: 'user-123',
-    email: 'user@example.com',
-    username: 'john_doe'
+    id: "user-123",
+    email: "user@example.com",
+    username: "john_doe",
   },
-  
+
   // 自定义标签
   tags: {
-    team: 'frontend',
-    feature: 'checkout'
+    team: "frontend",
+    feature: "checkout",
   },
-  
+
   // 插件配置
-  enableBlankScreenDetection: true,   // 启用白屏检测
-  enableApiMonitoring: true,          // 启用 API 监控
+  enableBlankScreenDetection: true, // 启用白屏检测
+  enableApiMonitoring: true, // 启用 API 监控
 });
 ```
 
@@ -144,7 +144,7 @@ const client = init({
 #### 2.3.1 捕获错误
 
 ```typescript
-import { getClient } from '@rewind-dev/sdk';
+import { getClient } from "@rewind-dev/sdk";
 
 const client = getClient();
 
@@ -155,10 +155,10 @@ try {
   // 手动上报错误
   client?.captureError(error, {
     extra: {
-      userId: '123',
-      action: 'checkout',
-      step: 'payment'
-    }
+      userId: "123",
+      action: "checkout",
+      step: "payment",
+    },
   });
 }
 ```
@@ -166,42 +166,42 @@ try {
 #### 2.3.2 添加面包屑
 
 ```typescript
-import { getClient } from '@rewind-dev/sdk';
+import { getClient } from "@rewind-dev/sdk";
 
 const client = getClient();
 
 // 添加自定义面包屑
 client?.addBreadcrumb({
-  type: 'user',
-  message: '用户点击了购买按钮',
+  type: "user",
+  message: "用户点击了购买按钮",
   timestamp: Date.now(),
-  level: 'info',
-  category: 'ui',
+  level: "info",
+  category: "ui",
   data: {
-    buttonId: 'buy-now',
-    productId: 'prod-123'
-  }
+    buttonId: "buy-now",
+    productId: "prod-123",
+  },
 });
 ```
 
 #### 2.3.3 发送自定义事件
 
 ```typescript
-import { getClient } from '@rewind-dev/sdk';
+import { getClient } from "@rewind-dev/sdk";
 
 const client = getClient();
 
 // 发送业务事件
 client?.sendEvent({
-  type: 'business',
-  message: '用户完成购买',
+  type: "business",
+  message: "用户完成购买",
   timestamp: Date.now(),
-  level: 'info',
+  level: "info",
   extra: {
-    orderId: 'order-456',
+    orderId: "order-456",
     amount: 99.99,
-    currency: 'USD'
-  }
+    currency: "USD",
+  },
 });
 ```
 
@@ -242,37 +242,37 @@ root.render(<App />);
 
 ```typescript
 // src/plugins/monitoring.ts
-import { init } from '@rewind-dev/sdk';
-import type { App } from 'vue';
+import { init } from "@rewind-dev/sdk";
+import type { App } from "vue";
 
 export default {
   install(app: App) {
     const client = init({
       dsn: import.meta.env.VITE_REWIND_DSN,
       appId: import.meta.env.VITE_REWIND_APP_ID,
-      appVersion: import.meta.env.VITE_APP_VERSION || '1.0.0',
+      appVersion: import.meta.env.VITE_APP_VERSION || "1.0.0",
       environment: import.meta.env.MODE,
     });
-    
+
     // 全局错误处理
     app.config.errorHandler = (error, instance, info) => {
       client?.captureError(error as Error, {
-        extra: { info, component: instance?.$options.name }
+        extra: { info, component: instance?.$options.name },
       });
     };
-    
-    app.provide('rewindClient', client);
-  }
+
+    app.provide("rewindClient", client);
+  },
 };
 
 // src/main.ts
-import { createApp } from 'vue';
-import App from './App.vue';
-import monitoring from './plugins/monitoring';
+import { createApp } from "vue";
+import App from "./App.vue";
+import monitoring from "./plugins/monitoring";
 
 const app = createApp(App);
 app.use(monitoring);
-app.mount('#app');
+app.mount("#app");
 ```
 
 ### 2.5 高级功能
@@ -280,24 +280,24 @@ app.mount('#app');
 #### 2.5.1 自定义插件
 
 ```typescript
-import { init, type SDK } from '@rewind-dev/sdk';
+import { init, type SDK } from "@rewind-dev/sdk";
 
 // 创建自定义插件
 class CustomPlugin implements SDK.Plugin {
-  name = 'custom-plugin';
-  
+  name = "custom-plugin";
+
   setup(client: SDK.Client) {
     // 监听特定事件
-    window.addEventListener('custom-event', (event) => {
+    window.addEventListener("custom-event", (event) => {
       client.addBreadcrumb({
-        type: 'custom',
-        message: '自定义事件触发',
+        type: "custom",
+        message: "自定义事件触发",
         timestamp: Date.now(),
-        data: event.detail
+        data: event.detail,
       });
     });
   }
-  
+
   teardown() {
     // 清理资源
   }
@@ -305,9 +305,9 @@ class CustomPlugin implements SDK.Plugin {
 
 // 注册插件
 const client = init({
-  dsn: 'your-dsn',
-  appId: 'your-app-id',
-  appVersion: '1.0.0'
+  dsn: "your-dsn",
+  appId: "your-app-id",
+  appVersion: "1.0.0",
 });
 
 client.registerPlugin(new CustomPlugin());
@@ -316,20 +316,23 @@ client.registerPlugin(new CustomPlugin());
 #### 2.5.2 条件采样
 
 ```typescript
-import { init } from '@rewind-dev/sdk';
+import { init } from "@rewind-dev/sdk";
 
 init({
-  dsn: 'your-dsn',
-  appId: 'your-app-id',
-  appVersion: '1.0.0',
-  
+  dsn: "your-dsn",
+  appId: "your-app-id",
+  appVersion: "1.0.0",
+
   // 根据用户类型设置不同采样率
   sampleRate: (() => {
-    const userType = localStorage.getItem('userType');
+    const userType = localStorage.getItem("userType");
     switch (userType) {
-      case 'vip': return 1.0;      // VIP 用户 100% 采样
-      case 'premium': return 0.5;  // 付费用户 50% 采样
-      default: return 0.1;         // 普通用户 10% 采样
+      case "vip":
+        return 1.0; // VIP 用户 100% 采样
+      case "premium":
+        return 0.5; // 付费用户 50% 采样
+      default:
+        return 0.1; // 普通用户 10% 采样
     }
   })(),
 });
@@ -370,21 +373,25 @@ init({
 #### 3.2.2 问题详情
 
 **基础信息**
+
 - 错误消息和堆栈信息
 - 发生时间和影响用户数
 - 错误级别和状态
 
 **用户轨迹**
+
 - 完整的用户操作时间线
 - 点击、导航、API 调用记录
 - 错误发生前的关键操作
 
 **环境信息**
+
 - 浏览器、操作系统信息
 - 屏幕分辨率、设备类型
 - 网络状态、页面 URL
 
 **AI 分析**
+
 - 错误根因分析
 - 可能的修复建议
 - 相似问题推荐
@@ -560,8 +567,8 @@ Content-Type: application/json
 
 ```typescript
 // React 错误边界示例
-import React from 'react';
-import { getClient } from '@rewind-dev/sdk';
+import React from "react";
+import { getClient } from "@rewind-dev/sdk";
 
 class ErrorBoundary extends React.Component {
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
@@ -569,11 +576,11 @@ class ErrorBoundary extends React.Component {
     client?.captureError(error, {
       extra: {
         componentStack: errorInfo.componentStack,
-        errorBoundary: true
-      }
+        errorBoundary: true,
+      },
     });
   }
-  
+
   render() {
     // 错误 UI 渲染逻辑
   }
@@ -584,13 +591,13 @@ class ErrorBoundary extends React.Component {
 
 ```typescript
 // Promise 错误捕获
-window.addEventListener('unhandledrejection', (event) => {
+window.addEventListener("unhandledrejection", (event) => {
   const client = getClient();
   client?.captureError(new Error(event.reason), {
     extra: {
-      type: 'unhandledrejection',
-      promise: true
-    }
+      type: "unhandledrejection",
+      promise: true,
+    },
   });
 });
 ```
@@ -598,22 +605,25 @@ window.addEventListener('unhandledrejection', (event) => {
 #### 5.1.3 性能监控
 
 ```typescript
-import { getClient } from '@rewind-dev/sdk';
+import { getClient } from "@rewind-dev/sdk";
 
 // 监控页面加载性能
-window.addEventListener('load', () => {
+window.addEventListener("load", () => {
   const client = getClient();
-  const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-  
+  const navigation = performance.getEntriesByType(
+    "navigation",
+  )[0] as PerformanceNavigationTiming;
+
   client?.sendEvent({
-    type: 'performance',
-    message: '页面加载完成',
+    type: "performance",
+    message: "页面加载完成",
     timestamp: Date.now(),
     extra: {
       loadTime: navigation.loadEventEnd - navigation.fetchStart,
-      domContentLoaded: navigation.domContentLoadedEventEnd - navigation.fetchStart,
-      firstPaint: performance.getEntriesByName('first-paint')[0]?.startTime
-    }
+      domContentLoaded:
+        navigation.domContentLoadedEventEnd - navigation.fetchStart,
+      firstPaint: performance.getEntriesByName("first-paint")[0]?.startTime,
+    },
   });
 });
 ```
@@ -624,10 +634,12 @@ window.addEventListener('load', () => {
 
 ```typescript
 // ❌ 不好的错误信息
-throw new Error('Something went wrong');
+throw new Error("Something went wrong");
 
 // ✅ 好的错误信息
-throw new Error(`Failed to load user profile: ${userId}, status: ${response.status}`);
+throw new Error(
+  `Failed to load user profile: ${userId}, status: ${response.status}`,
+);
 ```
 
 #### 5.2.2 结构化的额外数据
@@ -638,19 +650,19 @@ client?.captureError(error, {
   extra: {
     user: {
       id: userId,
-      role: userRole
+      role: userRole,
     },
     request: {
       url: requestUrl,
-      method: 'POST',
-      body: requestBody
+      method: "POST",
+      body: requestBody,
     },
     context: {
       page: currentPage,
-      feature: 'checkout',
-      step: 'payment'
-    }
-  }
+      feature: "checkout",
+      step: "payment",
+    },
+  },
 });
 ```
 
@@ -659,10 +671,10 @@ client?.captureError(error, {
 ```typescript
 // 配置敏感信息过滤
 init({
-  dsn: 'your-dsn',
-  appId: 'your-app-id',
-  appVersion: '1.0.0',
-  
+  dsn: "your-dsn",
+  appId: "your-app-id",
+  appVersion: "1.0.0",
+
   // 自定义数据处理
   beforeSend: (event) => {
     // 过滤敏感信息
@@ -670,10 +682,10 @@ init({
       delete event.extra.password;
     }
     if (event.extra?.creditCard) {
-      event.extra.creditCard = '****';
+      event.extra.creditCard = "****";
     }
     return event;
-  }
+  },
 });
 ```
 
@@ -684,24 +696,28 @@ init({
 ```typescript
 // 根据环境和用户类型设置采样率
 const getSampleRate = () => {
-  if (process.env.NODE_ENV === 'development') {
-    return 1.0;  // 开发环境 100% 采样
+  if (process.env.NODE_ENV === "development") {
+    return 1.0; // 开发环境 100% 采样
   }
-  
+
   const userType = getUserType();
   switch (userType) {
-    case 'internal': return 1.0;    // 内部用户 100%
-    case 'beta': return 0.5;        // Beta 用户 50%
-    case 'premium': return 0.2;     // 付费用户 20%
-    default: return 0.05;           // 普通用户 5%
+    case "internal":
+      return 1.0; // 内部用户 100%
+    case "beta":
+      return 0.5; // Beta 用户 50%
+    case "premium":
+      return 0.2; // 付费用户 20%
+    default:
+      return 0.05; // 普通用户 5%
   }
 };
 
 init({
-  dsn: 'your-dsn',
-  appId: 'your-app-id',
-  appVersion: '1.0.0',
-  sampleRate: getSampleRate()
+  dsn: "your-dsn",
+  appId: "your-app-id",
+  appVersion: "1.0.0",
+  sampleRate: getSampleRate(),
 });
 ```
 
@@ -710,16 +726,16 @@ init({
 ```typescript
 // SDK 会自动批量上报，也可以手动控制
 init({
-  dsn: 'your-dsn',
-  appId: 'your-app-id',
-  appVersion: '1.0.0',
-  
+  dsn: "your-dsn",
+  appId: "your-app-id",
+  appVersion: "1.0.0",
+
   // 批量上报配置
   transport: {
-    batchSize: 10,        // 批量大小
-    flushInterval: 5000,  // 刷新间隔（毫秒）
-    maxRetries: 3         // 最大重试次数
-  }
+    batchSize: 10, // 批量大小
+    flushInterval: 5000, // 刷新间隔（毫秒）
+    maxRetries: 3, // 最大重试次数
+  },
 });
 ```
 
@@ -744,10 +760,10 @@ init({
 ```typescript
 // 启用调试模式
 init({
-  dsn: 'your-dsn',
-  appId: 'your-app-id',
-  appVersion: '1.0.0',
-  debug: true  // 启用调试日志
+  dsn: "your-dsn",
+  appId: "your-app-id",
+  appVersion: "1.0.0",
+  debug: true, // 启用调试日志
 });
 ```
 
@@ -764,17 +780,17 @@ init({
 ```typescript
 // 监听上报状态
 init({
-  dsn: 'your-dsn',
-  appId: 'your-app-id',
-  appVersion: '1.0.0',
-  
+  dsn: "your-dsn",
+  appId: "your-app-id",
+  appVersion: "1.0.0",
+
   // 上报回调
   onSuccess: (event) => {
-    console.log('上报成功:', event);
+    console.log("上报成功:", event);
   },
   onError: (error, event) => {
-    console.error('上报失败:', error, event);
-  }
+    console.error("上报失败:", error, event);
+  },
 });
 ```
 
@@ -793,9 +809,9 @@ init({
 
 ```bash
 # 查看数据库慢查询
-SELECT query, mean_time, calls 
-FROM pg_stat_statements 
-ORDER BY mean_time DESC 
+SELECT query, mean_time, calls
+FROM pg_stat_statements
+ORDER BY mean_time DESC
 LIMIT 10;
 
 # 检查 Redis 性能
@@ -848,6 +864,7 @@ Error: connect ECONNREFUSED 127.0.0.1:5432
 ### Q1: SDK 会影响应用性能吗？
 
 **A:** SDK 经过精心优化，对应用性能影响极小：
+
 - 核心包 gzip 后 < 15KB
 - 异步上报，不阻塞主线程
 - 智能采样，减少网络请求
@@ -856,6 +873,7 @@ Error: connect ECONNREFUSED 127.0.0.1:5432
 ### Q2: 如何处理敏感数据？
 
 **A:** 多种方式保护敏感数据：
+
 - 使用 `beforeSend` 回调过滤敏感字段
 - 配置采样率，减少数据收集
 - 设置数据保留期限，定期清理
@@ -864,6 +882,7 @@ Error: connect ECONNREFUSED 127.0.0.1:5432
 ### Q3: 支持哪些浏览器？
 
 **A:** SDK 支持所有现代浏览器：
+
 - Chrome 60+
 - Firefox 55+
 - Safari 12+
@@ -873,6 +892,7 @@ Error: connect ECONNREFUSED 127.0.0.1:5432
 ### Q4: 如何扩展 SDK 功能？
 
 **A:** 通过插件系统扩展：
+
 - 实现 `Plugin` 接口
 - 使用 `client.registerPlugin()` 注册
 - 监听 DOM 事件、API 调用等
@@ -881,6 +901,7 @@ Error: connect ECONNREFUSED 127.0.0.1:5432
 ### Q5: 数据存储多长时间？
 
 **A:** 可配置数据保留策略：
+
 - 默认保留 30 天
 - 支持 7 天到 1 年的配置
 - 自动清理过期数据
@@ -899,9 +920,9 @@ Error: connect ECONNREFUSED 127.0.0.1:5432
 
 ### 8.2 社区支持
 
-- **GitHub Issues**: https://github.com/your-org/rewind/issues
-- **讨论区**: https://github.com/your-org/rewind/discussions
-- **更新日志**: https://github.com/your-org/rewind/releases
+- **GitHub Issues**: https://github.com/X29w/rewind/issues
+- **讨论区**: https://github.com/X29w/rewind/discussions
+- **更新日志**: https://github.com/X29w/rewind/releases
 
 ### 8.3 商业支持
 

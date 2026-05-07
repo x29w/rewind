@@ -45,7 +45,7 @@ Rewind 是一個智慧前端監控平台，由三個核心組件組成：
 
 ```bash
 # 1. 複製專案
-git clone https://github.com/your-org/rewind.git
+git clone https://github.com/X29w/rewind.git
 cd rewind
 
 # 2. 設定環境變數
@@ -91,51 +91,51 @@ yarn add @rewind-dev/sdk
 #### 2.2.1 最簡整合
 
 ```typescript
-import { init } from '@rewind-dev/sdk';
+import { init } from "@rewind-dev/sdk";
 
 // 在應用程式啟動時初始化
 init({
-  dsn: 'http://localhost:3000/api/v1/report',  // Server 位址
-  appId: 'your-app-id',                        // 從 Dashboard 取得
-  appVersion: '1.0.0',                         // 應用程式版本
-  environment: 'production',                   // 環境識別
+  dsn: "http://localhost:3000/api/v1/report", // Server 位址
+  appId: "your-app-id", // 從 Dashboard 取得
+  appVersion: "1.0.0", // 應用程式版本
+  environment: "production", // 環境識別
 });
 ```
 
 #### 2.2.2 完整設定
 
 ```typescript
-import { init } from '@rewind-dev/sdk';
+import { init } from "@rewind-dev/sdk";
 
 const client = init({
   // 必需設定
-  dsn: 'http://localhost:3000/api/v1/report',
-  appId: 'your-app-id',
-  appVersion: '1.0.0',
-  
+  dsn: "http://localhost:3000/api/v1/report",
+  appId: "your-app-id",
+  appVersion: "1.0.0",
+
   // 可選設定
-  environment: 'production',           // 環境：development, staging, production
-  sampleRate: 1.0,                    // 取樣率：0.0-1.0，1.0 表示 100% 取樣
-  maxBreadcrumbs: 100,                // 麵包屑最大數量
-  enabled: true,                      // 是否啟用 SDK
-  debug: false,                       // 除錯模式
-  
+  environment: "production", // 環境：development, staging, production
+  sampleRate: 1.0, // 取樣率：0.0-1.0，1.0 表示 100% 取樣
+  maxBreadcrumbs: 100, // 麵包屑最大數量
+  enabled: true, // 是否啟用 SDK
+  debug: false, // 除錯模式
+
   // 使用者資訊
   user: {
-    id: 'user-123',
-    email: 'user@example.com',
-    username: 'john_doe'
+    id: "user-123",
+    email: "user@example.com",
+    username: "john_doe",
   },
-  
+
   // 自訂標籤
   tags: {
-    team: 'frontend',
-    feature: 'checkout'
+    team: "frontend",
+    feature: "checkout",
   },
-  
+
   // 外掛設定
-  enableBlankScreenDetection: true,   // 啟用白屏檢測
-  enableApiMonitoring: true,          // 啟用 API 監控
+  enableBlankScreenDetection: true, // 啟用白屏檢測
+  enableApiMonitoring: true, // 啟用 API 監控
 });
 ```
 
@@ -144,7 +144,7 @@ const client = init({
 #### 2.3.1 捕獲錯誤
 
 ```typescript
-import { getClient } from '@rewind-dev/sdk';
+import { getClient } from "@rewind-dev/sdk";
 
 const client = getClient();
 
@@ -155,10 +155,10 @@ try {
   // 手動上報錯誤
   client?.captureError(error, {
     extra: {
-      userId: '123',
-      action: 'checkout',
-      step: 'payment'
-    }
+      userId: "123",
+      action: "checkout",
+      step: "payment",
+    },
   });
 }
 ```
@@ -166,21 +166,21 @@ try {
 #### 2.3.2 新增麵包屑
 
 ```typescript
-import { getClient } from '@rewind-dev/sdk';
+import { getClient } from "@rewind-dev/sdk";
 
 const client = getClient();
 
 // 新增自訂麵包屑
 client?.addBreadcrumb({
-  type: 'user',
-  message: '使用者點擊了購買按鈕',
+  type: "user",
+  message: "使用者點擊了購買按鈕",
   timestamp: Date.now(),
-  level: 'info',
-  category: 'ui',
+  level: "info",
+  category: "ui",
   data: {
-    buttonId: 'buy-now',
-    productId: 'prod-123'
-  }
+    buttonId: "buy-now",
+    productId: "prod-123",
+  },
 });
 ```
 
@@ -221,37 +221,37 @@ root.render(<App />);
 
 ```typescript
 // src/plugins/monitoring.ts
-import { init } from '@rewind-dev/sdk';
-import type { App } from 'vue';
+import { init } from "@rewind-dev/sdk";
+import type { App } from "vue";
 
 export default {
   install(app: App) {
     const client = init({
       dsn: import.meta.env.VITE_REWIND_DSN,
       appId: import.meta.env.VITE_REWIND_APP_ID,
-      appVersion: import.meta.env.VITE_APP_VERSION || '1.0.0',
+      appVersion: import.meta.env.VITE_APP_VERSION || "1.0.0",
       environment: import.meta.env.MODE,
     });
-    
+
     // 全域錯誤處理
     app.config.errorHandler = (error, instance, info) => {
       client?.captureError(error as Error, {
-        extra: { info, component: instance?.$options.name }
+        extra: { info, component: instance?.$options.name },
       });
     };
-    
-    app.provide('rewindClient', client);
-  }
+
+    app.provide("rewindClient", client);
+  },
 };
 
 // src/main.ts
-import { createApp } from 'vue';
-import App from './App.vue';
-import monitoring from './plugins/monitoring';
+import { createApp } from "vue";
+import App from "./App.vue";
+import monitoring from "./plugins/monitoring";
 
 const app = createApp(App);
 app.use(monitoring);
-app.mount('#app');
+app.mount("#app");
 ```
 
 ---
@@ -289,21 +289,25 @@ app.mount('#app');
 #### 3.2.2 問題詳情
 
 **基礎資訊**
+
 - 錯誤訊息和堆疊資訊
 - 發生時間和影響使用者數
 - 錯誤級別和狀態
 
 **使用者軌跡**
+
 - 完整的使用者操作時間線
 - 點擊、導航、API 呼叫記錄
 - 錯誤發生前的關鍵操作
 
 **環境資訊**
+
 - 瀏覽器、作業系統資訊
 - 螢幕解析度、裝置類型
 - 網路狀態、頁面 URL
 
 **AI 分析**
+
 - 錯誤根因分析
 - 可能的修復建議
 - 相似問題推薦
@@ -368,8 +372,8 @@ X-API-Key: your-api-key
 
 ```typescript
 // React 錯誤邊界範例
-import React from 'react';
-import { getClient } from '@rewind-dev/sdk';
+import React from "react";
+import { getClient } from "@rewind-dev/sdk";
 
 class ErrorBoundary extends React.Component {
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
@@ -377,11 +381,11 @@ class ErrorBoundary extends React.Component {
     client?.captureError(error, {
       extra: {
         componentStack: errorInfo.componentStack,
-        errorBoundary: true
-      }
+        errorBoundary: true,
+      },
     });
   }
-  
+
   render() {
     // 錯誤 UI 渲染邏輯
   }
@@ -395,24 +399,28 @@ class ErrorBoundary extends React.Component {
 ```typescript
 // 根據環境和使用者類型設定取樣率
 const getSampleRate = () => {
-  if (process.env.NODE_ENV === 'development') {
-    return 1.0;  // 開發環境 100% 取樣
+  if (process.env.NODE_ENV === "development") {
+    return 1.0; // 開發環境 100% 取樣
   }
-  
+
   const userType = getUserType();
   switch (userType) {
-    case 'internal': return 1.0;    // 內部使用者 100%
-    case 'beta': return 0.5;        // Beta 使用者 50%
-    case 'premium': return 0.2;     // 付費使用者 20%
-    default: return 0.05;           // 普通使用者 5%
+    case "internal":
+      return 1.0; // 內部使用者 100%
+    case "beta":
+      return 0.5; // Beta 使用者 50%
+    case "premium":
+      return 0.2; // 付費使用者 20%
+    default:
+      return 0.05; // 普通使用者 5%
   }
 };
 
 init({
-  dsn: 'your-dsn',
-  appId: 'your-app-id',
-  appVersion: '1.0.0',
-  sampleRate: getSampleRate()
+  dsn: "your-dsn",
+  appId: "your-app-id",
+  appVersion: "1.0.0",
+  sampleRate: getSampleRate(),
 });
 ```
 
@@ -423,6 +431,7 @@ init({
 ### Q1: SDK 會影響應用程式效能嗎？
 
 **A:** SDK 經過精心最佳化，對應用程式效能影響極小：
+
 - 核心套件 < 15KB gzip 壓縮
 - 非同步上報，不阻塞主執行緒
 - 智慧取樣，減少網路請求
@@ -431,6 +440,7 @@ init({
 ### Q2: 如何處理敏感資料？
 
 **A:** 多種方式保護敏感資料：
+
 - 使用 `beforeSend` 回呼過濾敏感欄位
 - 設定取樣率，減少資料收集
 - 設定資料保留期限，定期清理
@@ -439,6 +449,7 @@ init({
 ### Q3: 支援哪些瀏覽器？
 
 **A:** SDK 支援所有現代瀏覽器：
+
 - Chrome 60+
 - Firefox 55+
 - Safari 12+
@@ -458,9 +469,9 @@ init({
 
 ### 7.2 社群支援
 
-- **GitHub Issues**: https://github.com/your-org/rewind/issues
-- **討論區**: https://github.com/your-org/rewind/discussions
-- **更新日誌**: https://github.com/your-org/rewind/releases
+- **GitHub Issues**: https://github.com/X29w/rewind/issues
+- **討論區**: https://github.com/X29w/rewind/discussions
+- **更新日誌**: https://github.com/X29w/rewind/releases
 
 ### 7.3 商業支援
 

@@ -45,7 +45,7 @@ User App → SDK Collection → Server Processing → Dashboard Display
 
 ```bash
 # 1. Clone project
-git clone https://github.com/your-org/rewind.git
+git clone https://github.com/X29w/rewind.git
 cd rewind
 
 # 2. Configure environment variables
@@ -91,51 +91,51 @@ yarn add @rewind-dev/sdk
 #### 2.2.1 Minimal Integration
 
 ```typescript
-import { init } from '@rewind-dev/sdk';
+import { init } from "@rewind-dev/sdk";
 
 // Initialize when app starts
 init({
-  dsn: 'http://localhost:3000/api/v1/report',  // Server address
-  appId: 'your-app-id',                        // Get from Dashboard
-  appVersion: '1.0.0',                         // App version
-  environment: 'production',                   // Environment identifier
+  dsn: "http://localhost:3000/api/v1/report", // Server address
+  appId: "your-app-id", // Get from Dashboard
+  appVersion: "1.0.0", // App version
+  environment: "production", // Environment identifier
 });
 ```
 
 #### 2.2.2 Complete Configuration
 
 ```typescript
-import { init } from '@rewind-dev/sdk';
+import { init } from "@rewind-dev/sdk";
 
 const client = init({
   // Required configuration
-  dsn: 'http://localhost:3000/api/v1/report',
-  appId: 'your-app-id',
-  appVersion: '1.0.0',
-  
+  dsn: "http://localhost:3000/api/v1/report",
+  appId: "your-app-id",
+  appVersion: "1.0.0",
+
   // Optional configuration
-  environment: 'production',           // Environment: development, staging, production
-  sampleRate: 1.0,                    // Sample rate: 0.0-1.0, 1.0 means 100% sampling
-  maxBreadcrumbs: 100,                // Maximum breadcrumbs count
-  enabled: true,                      // Whether to enable SDK
-  debug: false,                       // Debug mode
-  
+  environment: "production", // Environment: development, staging, production
+  sampleRate: 1.0, // Sample rate: 0.0-1.0, 1.0 means 100% sampling
+  maxBreadcrumbs: 100, // Maximum breadcrumbs count
+  enabled: true, // Whether to enable SDK
+  debug: false, // Debug mode
+
   // User information
   user: {
-    id: 'user-123',
-    email: 'user@example.com',
-    username: 'john_doe'
+    id: "user-123",
+    email: "user@example.com",
+    username: "john_doe",
   },
-  
+
   // Custom tags
   tags: {
-    team: 'frontend',
-    feature: 'checkout'
+    team: "frontend",
+    feature: "checkout",
   },
-  
+
   // Plugin configuration
-  enableBlankScreenDetection: true,   // Enable blank screen detection
-  enableApiMonitoring: true,          // Enable API monitoring
+  enableBlankScreenDetection: true, // Enable blank screen detection
+  enableApiMonitoring: true, // Enable API monitoring
 });
 ```
 
@@ -144,7 +144,7 @@ const client = init({
 #### 2.3.1 Capture Errors
 
 ```typescript
-import { getClient } from '@rewind-dev/sdk';
+import { getClient } from "@rewind-dev/sdk";
 
 const client = getClient();
 
@@ -155,10 +155,10 @@ try {
   // Manually report error
   client?.captureError(error, {
     extra: {
-      userId: '123',
-      action: 'checkout',
-      step: 'payment'
-    }
+      userId: "123",
+      action: "checkout",
+      step: "payment",
+    },
   });
 }
 ```
@@ -166,42 +166,42 @@ try {
 #### 2.3.2 Add Breadcrumbs
 
 ```typescript
-import { getClient } from '@rewind-dev/sdk';
+import { getClient } from "@rewind-dev/sdk";
 
 const client = getClient();
 
 // Add custom breadcrumb
 client?.addBreadcrumb({
-  type: 'user',
-  message: 'User clicked buy button',
+  type: "user",
+  message: "User clicked buy button",
   timestamp: Date.now(),
-  level: 'info',
-  category: 'ui',
+  level: "info",
+  category: "ui",
   data: {
-    buttonId: 'buy-now',
-    productId: 'prod-123'
-  }
+    buttonId: "buy-now",
+    productId: "prod-123",
+  },
 });
 ```
 
 #### 2.3.3 Send Custom Events
 
 ```typescript
-import { getClient } from '@rewind-dev/sdk';
+import { getClient } from "@rewind-dev/sdk";
 
 const client = getClient();
 
 // Send business event
 client?.sendEvent({
-  type: 'business',
-  message: 'User completed purchase',
+  type: "business",
+  message: "User completed purchase",
   timestamp: Date.now(),
-  level: 'info',
+  level: "info",
   extra: {
-    orderId: 'order-456',
+    orderId: "order-456",
     amount: 99.99,
-    currency: 'USD'
-  }
+    currency: "USD",
+  },
 });
 ```
 
@@ -242,37 +242,37 @@ root.render(<App />);
 
 ```typescript
 // src/plugins/monitoring.ts
-import { init } from '@rewind-dev/sdk';
-import type { App } from 'vue';
+import { init } from "@rewind-dev/sdk";
+import type { App } from "vue";
 
 export default {
   install(app: App) {
     const client = init({
       dsn: import.meta.env.VITE_REWIND_DSN,
       appId: import.meta.env.VITE_REWIND_APP_ID,
-      appVersion: import.meta.env.VITE_APP_VERSION || '1.0.0',
+      appVersion: import.meta.env.VITE_APP_VERSION || "1.0.0",
       environment: import.meta.env.MODE,
     });
-    
+
     // Global error handling
     app.config.errorHandler = (error, instance, info) => {
       client?.captureError(error as Error, {
-        extra: { info, component: instance?.$options.name }
+        extra: { info, component: instance?.$options.name },
       });
     };
-    
-    app.provide('rewindClient', client);
-  }
+
+    app.provide("rewindClient", client);
+  },
 };
 
 // src/main.ts
-import { createApp } from 'vue';
-import App from './App.vue';
-import monitoring from './plugins/monitoring';
+import { createApp } from "vue";
+import App from "./App.vue";
+import monitoring from "./plugins/monitoring";
 
 const app = createApp(App);
 app.use(monitoring);
-app.mount('#app');
+app.mount("#app");
 ```
 
 ---
@@ -310,21 +310,25 @@ app.mount('#app');
 #### 3.2.2 Issue Details
 
 **Basic Information**
+
 - Error message and stack information
 - Occurrence time and affected user count
 - Error level and status
 
 **User Trace**
+
 - Complete user operation timeline
 - Click, navigation, API call records
 - Key operations before error occurrence
 
 **Environment Information**
+
 - Browser, operating system information
 - Screen resolution, device type
 - Network status, page URL
 
 **AI Analysis**
+
 - Error root cause analysis
 - Possible fix suggestions
 - Similar issue recommendations
@@ -405,8 +409,8 @@ X-API-Key: your-api-key
 
 ```typescript
 // React Error Boundary Example
-import React from 'react';
-import { getClient } from '@rewind-dev/sdk';
+import React from "react";
+import { getClient } from "@rewind-dev/sdk";
 
 class ErrorBoundary extends React.Component {
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
@@ -414,11 +418,11 @@ class ErrorBoundary extends React.Component {
     client?.captureError(error, {
       extra: {
         componentStack: errorInfo.componentStack,
-        errorBoundary: true
-      }
+        errorBoundary: true,
+      },
     });
   }
-  
+
   render() {
     // Error UI rendering logic
   }
@@ -429,13 +433,13 @@ class ErrorBoundary extends React.Component {
 
 ```typescript
 // Promise error capture
-window.addEventListener('unhandledrejection', (event) => {
+window.addEventListener("unhandledrejection", (event) => {
   const client = getClient();
   client?.captureError(new Error(event.reason), {
     extra: {
-      type: 'unhandledrejection',
-      promise: true
-    }
+      type: "unhandledrejection",
+      promise: true,
+    },
   });
 });
 ```
@@ -447,24 +451,28 @@ window.addEventListener('unhandledrejection', (event) => {
 ```typescript
 // Set sample rate based on environment and user type
 const getSampleRate = () => {
-  if (process.env.NODE_ENV === 'development') {
-    return 1.0;  // 100% sampling in development
+  if (process.env.NODE_ENV === "development") {
+    return 1.0; // 100% sampling in development
   }
-  
+
   const userType = getUserType();
   switch (userType) {
-    case 'internal': return 1.0;    // Internal users 100%
-    case 'beta': return 0.5;        // Beta users 50%
-    case 'premium': return 0.2;     // Premium users 20%
-    default: return 0.05;           // Regular users 5%
+    case "internal":
+      return 1.0; // Internal users 100%
+    case "beta":
+      return 0.5; // Beta users 50%
+    case "premium":
+      return 0.2; // Premium users 20%
+    default:
+      return 0.05; // Regular users 5%
   }
 };
 
 init({
-  dsn: 'your-dsn',
-  appId: 'your-app-id',
-  appVersion: '1.0.0',
-  sampleRate: getSampleRate()
+  dsn: "your-dsn",
+  appId: "your-app-id",
+  appVersion: "1.0.0",
+  sampleRate: getSampleRate(),
 });
 ```
 
@@ -475,6 +483,7 @@ init({
 ### Q1: Will SDK affect application performance?
 
 **A:** SDK is carefully optimized with minimal impact on application performance:
+
 - Core package < 15KB gzipped
 - Async reporting, doesn't block main thread
 - Smart sampling reduces network requests
@@ -483,6 +492,7 @@ init({
 ### Q2: How to handle sensitive data?
 
 **A:** Multiple ways to protect sensitive data:
+
 - Use `beforeSend` callback to filter sensitive fields
 - Configure sample rate to reduce data collection
 - Set data retention period, regular cleanup
@@ -491,6 +501,7 @@ init({
 ### Q3: Which browsers are supported?
 
 **A:** SDK supports all modern browsers:
+
 - Chrome 60+
 - Firefox 55+
 - Safari 12+
@@ -510,9 +521,9 @@ init({
 
 ### 7.2 Community Support
 
-- **GitHub Issues**: https://github.com/your-org/rewind/issues
-- **Discussions**: https://github.com/your-org/rewind/discussions
-- **Changelog**: https://github.com/your-org/rewind/releases
+- **GitHub Issues**: https://github.com/X29w/rewind/issues
+- **Discussions**: https://github.com/X29w/rewind/discussions
+- **Changelog**: https://github.com/X29w/rewind/releases
 
 ### 7.3 Commercial Support
 
